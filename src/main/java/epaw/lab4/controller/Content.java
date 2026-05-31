@@ -1,0 +1,44 @@
+package epaw.lab4.controller;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import epaw.lab4.model.User;
+
+import java.io.IOException;
+
+/**
+ * Servlet implementation class Content
+ */
+@WebServlet("/Content")
+public class Content extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		HttpSession session = request.getSession(false);
+		String view = "Login";
+
+		if (session != null && session.getAttribute("user") != null) {
+			User user = (User) session.getAttribute("user");
+			if (user.isBanned()) {
+				view = "Banned.jsp";
+			} else {
+				view = "Timeline.jsp";
+			}
+		}
+
+		request.getRequestDispatcher(view).forward(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}
