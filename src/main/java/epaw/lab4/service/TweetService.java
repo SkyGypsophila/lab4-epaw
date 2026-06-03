@@ -30,20 +30,42 @@ public class TweetService {
 	}
 
 	public List<Tweet> getTweetsByUser(Integer uid, Integer start, Integer end) {
-		Optional<List<Tweet>> tweets = tweetRepository.findByUser(uid,start,end);
-    	if (tweets.isPresent())
-    	    return tweets.get();
-        return null;
+		Optional<List<Tweet>> tweets = tweetRepository.findByUser(uid, start, end);
+		if (tweets.isPresent()) {
+			List<Tweet> list = tweets.get();
+			// Por cada tweet, le asignamos sus comentarios
+			for (Tweet t : list) {
+				t.setComments(tweetRepository.findReplies(t.getId(), uid));
+			}
+			return list;
+		}
+		return null;
 	}
 
 	public List<Tweet> getFeedTweets(Integer userId, Integer start, Integer end) {
 		Optional<List<Tweet>> tweets = tweetRepository.findByFollowedUsers(userId, start, end);
-		if (tweets.isPresent())
-			return tweets.get();
+		if (tweets.isPresent()) {
+			List<Tweet> list = tweets.get();
+			for (Tweet t : list) {
+				t.setComments(tweetRepository.findReplies(t.getId(), userId));
+			}
+			return list;
+		}
 		return null;
 	}
 
-	// Toggle like: if already liked → unlike, otherwise → like
+	public List<Tweet> getGlobalTweets(Integer userId, Integer start, Integer end) {
+		Optional<List<Tweet>> tweets = tweetRepository.findAllGlobalTweets(userId, start, end);
+		if (tweets.isPresent()) {
+			List<Tweet> list = tweets.get();
+			for (Tweet t : list) {
+				t.setComments(tweetRepository.findReplies(t.getId(), userId));
+			}
+			return list;
+		}
+		return null;
+	}
+
 	public void toggleLike(Integer userId, Integer tweetId) {
 		if (tweetRepository.isLikedByUser(userId, tweetId)) {
 			tweetRepository.unlikeTweet(userId, tweetId);
@@ -51,5 +73,4 @@ public class TweetService {
 			tweetRepository.likeTweet(userId, tweetId);
 		}
 	}
-
 }

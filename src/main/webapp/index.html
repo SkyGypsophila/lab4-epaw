@@ -41,7 +41,7 @@
 			});
 			// Deal with form submission via AJAX
 			$(document).on("submit", "form", function (event) {
-				// sovles the bug of passwore fiels not being validated
+				// solves the bug of password fields not being validated
 				if (event.isDefaultPrevented() || !this.checkValidity()) {
 					return;
 				}
@@ -134,9 +134,34 @@
 						$("#feedIterator").load("FeedTweets");
 					} else if ($("#iterator").length) {
 						$("#iterator").load("Tweets");
+					} else if ($("#globalFeedIterator").length) {
+						$("#globalFeedIterator").load("GlobalFeedTweets");
 					}
 				});
 				event.preventDefault();
+			});
+			/* Comentar / Responder Tweet (Lógica Añadida) */
+			$(document).on("click", ".commentTweetBtn", function(event) {
+				event.preventDefault();
+				var tweetDiv = $(this).closest(".w3-card"); // Busca el contenedor del tweet
+				var parentId = tweetDiv.attr("id"); // Obtiene el ID del tweet padre
+				var content = tweetDiv.find(".commentText").val(); // Obtiene el texto introducido
+				
+				if (content.trim() !== "") {
+					$.post("AddTweet", {
+						content : content,
+						parentId : parentId
+					}, function() {
+						// Recargamos el iterador de tweets dinámico en el que nos encontremos actualmente
+						if ($("#feedIterator").length) {
+							$("#feedIterator").load("FeedTweets");
+						} else if ($("#iterator").length) {
+							$("#iterator").load("Tweets");
+						} else if ($("#globalFeedIterator").length) {
+							$("#globalFeedIterator").load("GlobalFeedTweets");
+						}
+					});
+				}
 			});
 
 		};
@@ -156,29 +181,20 @@
 
 <body>
 
-	<!-- Begin Navigation -->
 	<div class="w3-theme w3-top" id="navigation"> </div>
-	<!-- End Navigation -->
-
-	<!-- Begin Content -->
 	<div class="w3-row-padding" style="margin-top: 50px;margin-bottom: 75px">
 
-		<!-- Left Column -->
 		<div class="w3-container w3-col m3 w3-hide-small">
 			<div id="lcolumn"> </div>
 		</div>
-		<!-- Middle Column -->
 		<div class="w3-container w3-col m6">
 			<div id="content"> </div>
 		</div>
-		<!-- Right Column -->
 		<div class="w3-container w3-col m3 w3-hide-small">
 			<div id="rcolumn"> </div>
 		</div>
 
 	</div>
-	<!-- End Content -->
-	<!-- Footer -->
 	<footer class="w3-container w3-theme w3-bottom">
 		<p>Pompeu Fabra University @2026</p>
 	</footer>

@@ -1,21 +1,26 @@
 package epaw.lab4.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Tweet implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int id;        // maps to tweet_id in DB
-	private int uid;       // maps to user_id in DB
-	private String uname;  // joined from users.name
-	private String upicture; // joined from users.picture
+	private int id;        
+	private int uid;       
+	private String uname;  
+	private String upicture; 
 	private Integer parentId;
 	private Integer gameDiscussionId;
-	private Timestamp postDateTime; // maps to created_at in DB
+	private Timestamp postDateTime; 
 	private String content;
 	private int likeCount;
-	private boolean liked; // true if current user has liked this tweet
+	private boolean liked; 
+	
+	// NUEVO: Lista para guardar los comentarios anidados
+	private List<Tweet> comments = new ArrayList<>();
 
 	public Tweet() {
 	}
@@ -49,4 +54,8 @@ public class Tweet implements java.io.Serializable {
 
 	public boolean isLiked() { return liked; }
 	public void setLiked(boolean liked) { this.liked = liked; }
+
+	// NUEVO: Getters y Setters de los comentarios
+	public List<Tweet> getComments() { return comments; }
+	public void setComments(List<Tweet> comments) { this.comments = comments; }
 }
