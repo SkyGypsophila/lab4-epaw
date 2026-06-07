@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chirp · EPAW Lab Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ===================== TOKENS ===================== */
+:root {
+  --bg: #0E1217;
+  --surface: #181D24;
+  --surface-2: #1F262E;
+  --border: #262E38;
+  --text: #E7E9EA;
+  --muted: #8B98A5;
+  --accent: #6E56CF;
+  --accent-2: #5A46B5;
+  --like: #F91880;
+  --success: #00BA7C;
+  --danger: #EF4444;
+  --shadow: 0 1px 2px rgba(0,0,0,.3);
+  --radius: 12px;
+  --radius-lg: 16px;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: #07090C;
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+/* ===================== PAGE STRUCTURE ===================== */
+.page {
+  max-width: 1520px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+.frame-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 56px 0 12px;
+}
+.frame {
+  width: 1440px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,.4);
+}
+/* ===================== 3-COLUMN LAYOUT ===================== */
+.cols {
+  display: grid;
+  grid-template-columns: 260px 600px 360px;
+  gap: 24px;
+  padding: 16px 80px;
+}
+.col-left, .col-right { padding-top: 0; }
+
+/* ===================== LEFT NAV ===================== */
+.nav {
+  padding: 16px 4px;
+  display: flex; flex-direction: column;
+  gap: 2px;
+  height: 100%;
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px 18px;
+}
+.logo-mark {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #9B7BFF);
+  display: grid; place-items: center;
+  font-weight: 800; color: white; font-size: 20px;
+}
+.logo-word { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+.nav-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+}
+.nav-item i { width: 20px; text-align: center; font-size: 18px; }
+.nav-item:hover { background: var(--surface-2); color: var(--text); }
+.nav-item.active { background: var(--surface-2); color: var(--text); font-weight: 600; }
+.nav-item.active i { color: var(--accent); }
+.btn-tweet {
+  margin-top: 12px;
+  display: block;
+  text-align: center;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  padding: 14px 24px;
+  border-radius: 999px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+.btn-tweet:hover { background: var(--accent-2); }
+.user-chip {
+  margin-top: auto;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.user-chip .meta { display: flex; flex-direction: column; }
+.user-chip .meta b { font-size: 13px; }
+.user-chip .meta span { font-size: 12px; color: var(--muted); }
+.spacer { flex: 1; }
+
+/* ===================== CARDS ===================== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.card + .card { margin-top: 16px; }
+.card-title { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+.card-sub { color: var(--muted); font-size: 12px; margin: 0; }
+
+/* ===================== PAGE HEADER ===================== */
+.page-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.page-header .titles { flex: 1; }
+.page-header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+.page-header p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+
+/* ===================== AVATARS ===================== */
+.avatar {
+  flex: none;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.avatar.sm { width: 36px; height: 36px; font-size: 15px; }
+.avatar.md { width: 44px; height: 44px; font-size: 18px; }
+.avatar.lg { width: 96px; height: 96px; font-size: 38px; }
+.avatar.xl { width: 128px; height: 128px; font-size: 48px; }
+
+/* avatar color variations */
+.av-violet { background: linear-gradient(135deg, #6E56CF, #9B7BFF); }
+.av-pink   { background: linear-gradient(135deg, #F91880, #FF6FA8); }
+.av-green  { background: linear-gradient(135deg, #00BA7C, #50E3A4); }
+.av-blue   { background: linear-gradient(135deg, #1D9BF0, #58C0FF); }
+.av-amber  { background: linear-gradient(135deg, #F59E0B, #FBC658); }
+.av-red    { background: linear-gradient(135deg, #EF4444, #FF7B7B); }
+.av-teal   { background: linear-gradient(135deg, #14B8A6, #5EE7DA); }
+
+/* ===================== BUTTONS / PILLS ===================== */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: var(--accent); color: white;
+}
+.btn:hover { background: var(--accent-2); }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); font-weight: 600; }
+.btn.ghost:hover { background: var(--surface-2); }
+.btn.danger { background: var(--danger); }
+.btn.sm { padding: 6px 14px; font-size: 12px; }
+.btn.lg { padding: 12px 28px; font-size: 15px; }
+.btn.full { width: 100%; justify-content: center; }
+
+/* ===================== COMPOSE ===================== */
+.compose { display: flex; gap: 12px; }
+.compose .field {
+  flex: 1;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.compose textarea, .compose .placeholder {
+  background: transparent;
+  border: none;
+  resize: none;
+  color: var(--text);
+  font: 400 17px/1.4 Inter;
+  outline: none;
+  min-height: 28px;
+}
+.compose .placeholder { color: var(--muted); }
+.compose-bar { display: flex; align-items: center; gap: 18px; }
+.compose-bar .tools { display: flex; gap: 18px; color: var(--accent); font-size: 16px; }
+.compose-bar .tools i:hover { color: var(--accent-2); cursor: pointer; }
+.compose-bar .count { color: var(--muted); font-size: 12px; }
+
+/* ===================== TWEET ===================== */
+.tweet { display: flex; gap: 12px; }
+.tweet .body { flex: 1; min-width: 0; }
+.tweet .head { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.tweet .head .name { color: var(--text); font-weight: 700; font-size: 15px; }
+.tweet .head .menu { margin-left: auto; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+.tweet .head .menu:hover { background: var(--surface-2); color: var(--text); }
+.tweet .content { margin: 4px 0 8px; font-size: 15px; line-height: 1.5; }
+.tweet .media {
+  margin-top: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, #2A1F5E 0%, #6E56CF 50%, #F91880 100%);
+}
+.tweet .actions {
+  display: flex; gap: 32px;
+  margin-top: 8px;
+  color: var(--muted); font-size: 13px;
+}
+.tweet .actions .act {
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.tweet .actions .act:hover { background: var(--surface-2); color: var(--text); }
+.tweet .actions .act.liked { color: var(--like); font-weight: 600; }
+.tweet .actions .act.liked:hover { color: var(--like); }
+
+/* Nested replies */
+.replies {
+  margin-top: 12px;
+  margin-left: 24px;
+  padding-left: 16px;
+  border-left: 2px solid var(--border);
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+/* Tabs in header */
+.tabs { display: flex; gap: 8px; }
+
+/* ===================== RIGHT RAIL ===================== */
+.search {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.search input {
+  background: transparent; border: none; outline: none;
+  color: var(--text); font: 400 14px Inter;
+  flex: 1;
+}
+.who-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+}
+.who-row:first-of-type { border-top: 0; }
+.who-row .meta { flex: 1; min-width: 0; }
+.who-row .meta b { font-size: 14px; }
+.who-row .meta span { display: block; font-size: 12px; color: var(--muted); }
+.who-row:hover { background: var(--surface-2); }
+.see-all { padding: 14px 16px; color: var(--accent); font-weight: 600; font-size: 13px; cursor: pointer; }
+.who-card { padding: 0; }
+.who-card .title { padding: 16px; }
+
+.trend { padding: 12px 16px; border-top: 1px solid var(--border); }
+.trend small { color: var(--muted); font-size: 11px; }
+.trend b { display: block; font-size: 14px; margin: 2px 0; }
+
+/* ===================== LOGGED-OUT BANNER ===================== */
+.cta-banner {
+  background: linear-gradient(135deg, var(--accent), var(--like));
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex; align-items: center; gap: 24px;
+  margin-bottom: 16px;
+}
+.cta-banner h2 { margin: 0; font-size: 22px; }
+.cta-banner p { margin: 4px 0 0; color: rgba(255,255,255,.85); font-size: 14px; }
+.cta-banner .actions { margin-left: auto; display: flex; gap: 8px; }
+.cta-banner .btn { background: white; color: var(--accent); }
+.cta-banner .btn.ghost { background: transparent; color: white; border-color: rgba(255,255,255,.4); }
+
+/* ===================== TOP BAR (anonymous) ===================== */
+.topbar {
+  display: flex; align-items: center;
+  padding: 12px 80px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.topbar .logo { padding: 0; }
+.topbar .nav-inline { display: flex; gap: 6px; margin-left: 24px; }
+.topbar .nav-inline a {
+  padding: 8px 14px;
+  font-size: 14px; color: var(--muted);
+  border-radius: 999px;
+  text-decoration: none;
+}
+.topbar .nav-inline a.active { color: var(--text); background: var(--surface-2); }
+.topbar .auth { margin-left: auto; display: flex; gap: 8px; }
+
+/* ===================== AUTH SCREEN ===================== */
+.auth-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100%;
+}
+.auth-hero {
+  background: radial-gradient(circle at 30% 20%, rgba(110,86,207,.5), transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(249,24,128,.4), transparent 50%),
+              var(--bg);
+  padding: 80px;
+  display: flex; flex-direction: column; justify-content: center; gap: 24px;
+}
+.auth-hero .logo-mark { width: 64px; height: 64px; border-radius: 18px; font-size: 36px; }
+.auth-hero h1 { font-size: 56px; line-height: 1.05; margin: 0; font-weight: 800; letter-spacing: -.02em; }
+.auth-hero p { font-size: 18px; color: var(--muted); margin: 0; max-width: 480px; }
+.auth-hero ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.auth-hero li { display: flex; align-items: center; gap: 12px; font-size: 15px; }
+.auth-hero li i { color: var(--accent); font-size: 16px; width: 20px; }
+
+.auth-form-wrap {
+  padding: 80px;
+  display: flex; flex-direction: column; gap: 32px;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,.2));
+}
+.auth-tabs { display: flex; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; align-self: flex-start; }
+.auth-tabs button {
+  background: transparent; border: none;
+  color: var(--muted);
+  padding: 8px 20px;
+  border-radius: 999px;
+  font: 600 14px Inter;
+  cursor: pointer;
+}
+.auth-tabs button.active { background: var(--accent); color: white; }
+.auth-form { display: flex; flex-direction: column; gap: 16px; max-width: 420px; }
+.auth-form h2 { font-size: 28px; margin: 0; }
+.auth-form .sub { color: var(--muted); margin: 0; }
+.field-group { display: flex; flex-direction: column; gap: 6px; }
+.field-group label { font-size: 13px; color: var(--muted); font-weight: 500; }
+.field-group input {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--text);
+  font: 400 14px Inter;
+  outline: none;
+}
+.field-group input:focus { border-color: var(--accent); }
+.field-group .hint { font-size: 12px; color: var(--muted); }
+.field-row { display: flex; gap: 12px; }
+.field-row .field-group { flex: 1; }
+.auth-foot { font-size: 13px; color: var(--muted); }
+.auth-foot a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+/* ===================== PROFILE PAGE ===================== */
+.profile-banner {
+  height: 200px;
+  background: linear-gradient(135deg, #2A1F5E 0%, #6E56CF 40%, #F91880 100%);
+  border-radius: 12px 12px 0 0;
+  position: relative;
+}
+.profile-head {
+  padding: 0 20px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.profile-head .av-wrap {
+  position: relative;
+  margin-top: -64px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.profile-head .av-wrap .avatar { border: 4px solid var(--surface); }
+.profile-head .actions { padding-bottom: 12px; display: flex; gap: 8px; }
+.profile-bio { padding-top: 12px; }
+.profile-bio h2 { margin: 0; font-size: 22px; font-weight: 700; }
+.profile-bio .handle { color: var(--muted); font-size: 14px; }
+.profile-bio .desc { margin: 12px 0; font-size: 14px; line-height: 1.5; }
+.profile-meta {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  font-size: 13px; color: var(--muted);
+  margin-bottom: 12px;
+}
+.profile-meta i { margin-right: 4px; }
+.profile-stats {
+  display: flex; gap: 24px; font-size: 13px; color: var(--muted);
+}
+.profile-stats b { color: var(--text); font-weight: 700; margin-right: 4px; }
+
+.profile-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 0;
+  margin-bottom: 16px;
+}
+.profile-tabs > div {
+  flex: 1;
+  text-align: center;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.profile-tabs > div.active { color: var(--text); border-bottom-color: var(--accent); }
+.profile-tabs > div:hover { background: var(--surface-2); }
+
+/* ===================== ADMIN PAGE ===================== */
+.admin-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 20px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.admin-header .badge {
+  background: var(--danger); color: white;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.admin-header h1 { margin: 0; font-size: 22px; }
+.admin-header p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.admin-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.stat-card .lbl { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+.stat-card .val { font-size: 28px; font-weight: 800; margin: 4px 0; }
+.stat-card .delta { font-size: 12px; color: var(--success); }
+.stat-card .delta.bad { color: var(--danger); }
+
+.table-card { padding: 0; overflow: hidden; }
+.table-head {
+  padding: 16px 20px;
+  display: flex; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.table-head h2 { margin: 0; font-size: 16px; font-weight: 700; }
+.table-head .filter { margin-left: auto; display: flex; gap: 8px; }
+
+.user-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 110px 90px auto;
+  align-items: center; gap: 16px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+}
+.user-row:first-of-type { border-top: 0; }
+.user-row .uinfo { display: flex; flex-direction: column; }
+.user-row .uinfo b { font-size: 14px; }
+.user-row .uinfo span { font-size: 12px; color: var(--muted); }
+.user-row .status {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  padding: 4px 10px; border-radius: 999px;
+  display: inline-block; width: fit-content;
+}
+.status.ok    { background: rgba(0,186,124,.15); color: var(--success); }
+.status.warn  { background: rgba(245,158,11,.15); color: #F59E0B; }
+.status.banned{ background: rgba(239,68,68,.15); color: var(--danger); }
+.user-row .when { color: var(--muted); font-size: 13px; }
+.user-row .row-actions { display: flex; gap: 6px; justify-self: end; }
+.icon-btn {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--muted);
+  border: none; cursor: pointer;
+}
+.icon-btn:hover { color: var(--text); }
+.icon-btn.danger:hover { background: rgba(239,68,68,.18); color: var(--danger); }
+
+/* ===================== STYLE GUIDE FRAME ===================== */
+.guide { padding: 48px 80px; }
+.guide h1 { font-size: 40px; font-weight: 800; letter-spacing: -.02em; margin: 0 0 4px; }
+.guide .lead { color: var(--muted); font-size: 16px; margin: 0 0 40px; }
+.guide h2 { font-size: 22px; font-weight: 700; margin: 32px 0 16px; }
+.swatches { display: flex; gap: 16px; flex-wrap: wrap; }
+.swatch {
+  width: 160px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+.swatch .chip { height: 80px; border-radius: 8px; }
+.swatch b { display: block; margin-top: 10px; font-size: 13px; }
+.swatch small { color: var(--muted); font-size: 12px; }
+.type-stack > div { margin-bottom: 8px; }
+.comp-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.icon-grid {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px;
+}
+.icon-tile {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px; text-align: center;
+}
+.icon-tile i { font-size: 18px; color: var(--accent); display: block; margin-bottom: 6px; }
+.icon-tile span { font-size: 11px; color: var(--muted); }
+
+.grid-diagram {
+  display: grid; grid-template-columns: 260px 600px 360px;
+  gap: 24px;
+  background: var(--surface);
+  padding: 16px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+.grid-diagram > div {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 32px 8px;
+  background: rgba(110,86,207,.06);
+}
+
+/* ===================== UTILS ===================== */
+.row { display: flex; align-items: center; gap: 8px; }
+.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--muted); display: inline-block; }
+.muted { color: var(--muted); }
+.hidden { display: none; }
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ========== STYLE GUIDE ========== -->
+  <div class="frame-label">00 · Style guide</div>
+  <div class="frame">
+    <div class="guide">
+      <h1>Chirp · Design System</h1>
+      <p class="lead">EPAW Final Lab — Twitter-like social platform · dark mode mockups</p>
+
+      <h2>Color palette</h2>
+      <div class="swatches">
+        <div class="swatch"><div class="chip" style="background:#0E1217;border:1px solid var(--border)"></div><b>Background</b><small>#0E1217</small></div>
+        <div class="swatch"><div class="chip" style="background:#181D24"></div><b>Surface</b><small>#181D24</small></div>
+        <div class="swatch"><div class="chip" style="background:#262E38"></div><b>Border</b><small>#262E38</small></div>
+        <div class="swatch"><div class="chip" style="background:#6E56CF"></div><b>Accent</b><small>#6E56CF</small></div>
+        <div class="swatch"><div class="chip" style="background:#F91880"></div><b>Like</b><small>#F91880</small></div>
+        <div class="swatch"><div class="chip" style="background:#00BA7C"></div><b>Success</b><small>#00BA7C</small></div>
+        <div class="swatch"><div class="chip" style="background:#EF4444"></div><b>Danger</b><small>#EF4444</small></div>
+        <div class="swatch"><div class="chip" style="background:#E7E9EA"></div><b>Text</b><small>#E7E9EA</small></div>
+      </div>
+
+      <h2>Typography — Inter</h2>
+      <div class="type-stack">
+        <div style="font-size:40px;font-weight:800;letter-spacing:-.02em">Display 40 · ExtraBold — landing hero</div>
+        <div style="font-size:28px;font-weight:700">Heading 28 · Bold — page titles</div>
+        <div style="font-size:22px;font-weight:600">Subhead 22 · SemiBold — card titles</div>
+        <div style="font-size:17px;font-weight:400">Body 17 · Regular — compose & long text</div>
+        <div style="font-size:15px;font-weight:400">Tweet 15 · Regular — feed item content</div>
+        <div style="font-size:13px;font-weight:500;color:var(--muted)">Meta 13 · Medium — timestamps, counts</div>
+      </div>
+
+      <h2>Components</h2>
+      <div class="comp-row">
+        <button class="btn"><i class="fa-solid fa-feather"></i> Tweet</button>
+        <button class="btn ghost">Following</button>
+        <button class="btn danger"><i class="fa-solid fa-trash"></i> Delete</button>
+        <div class="search" style="margin:0;width:280px"><i class="fa-solid fa-magnifying-glass"></i><input placeholder="Search users…"></div>
+        <div class="avatar md av-violet">M</div>
+        <div class="avatar md av-pink">J</div>
+        <div class="avatar md av-green">P</div>
+      </div>
+
+      <h2>Layout — 3 column grid (1440 px viewport)</h2>
+      <div class="grid-diagram">
+        <div>Left nav · 260</div>
+        <div>Center feed · 600</div>
+        <div>Right rail · 360</div>
+      </div>
+      <p class="muted" style="font-size:13px;margin-top:8px">Maps directly to your existing W3.CSS <code>m3 / m6 / m3</code> split. Cards: 12 px radius, 1 px border, 16 px padding. Buttons: pill (999 radius), 8/18 padding.</p>
+
+      <h2>Icons — Font Awesome 6 (free)</h2>
+      <div class="icon-grid">
+        <div class="icon-tile"><i class="fa-solid fa-house"></i><span>Home</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-globe"></i><span>Global</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-user"></i><span>Profile</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-user-group"></i><span>Following</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-feather"></i><span>Compose</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-heart"></i><span>Like</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-comment"></i><span>Reply</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-shield-halved"></i><span>Admin</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-gear"></i><span>Settings</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-image"></i><span>Image</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-ellipsis"></i><span>More</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-share"></i><span>Share</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-trash"></i><span>Delete</span></div>
+        <div class="icon-tile"><i class="fa-solid fa-pen-to-square"></i><span>Edit</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 01 · ANONYMOUS GLOBAL FEED ========== -->
+  <div class="frame-label">01 · Anonymous global feed</div>
+  <div class="frame">
+    <!-- top bar -->
+    <div class="topbar">
+      <div class="logo">
+        <div class="logo-mark">C</div>
+      </div>
+      <div class="auth">
+        <button class="btn ghost">Log in</button>
+        <button class="btn">Sign up</button>
+      </div>
+    </div>
+    <div class="cols">
+      <!-- left -->
+      <div class="col-left">
+        <div class="nav" style="padding-top: 24px">
+          <div class="nav-item active"><i class="fa-solid fa-globe"></i> Global</div>
+        </div>
+      </div>
+      <!-- center -->
+      <div>
+        <div class="cta-banner">
+          <div>
+            <h2>Join the conversation</h2>
+            <p>Sign up to post, follow people you like, and build your own timeline.</p>
+          </div>
+          <div class="actions">
+            <button class="btn ghost">Log in</button>
+            <button class="btn">Sign up</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="page-header">
+            <div class="titles">
+              <h1>Global feed</h1>
+              <p>What people are talking about right now</p>
+            </div>
+            <div class="tabs">
+              <button class="btn">Latest</button>
+              <button class="btn ghost">Popular</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-pink">J</div>
+            <div class="body">
+              <div class="head">
+                <span class="name">Júlia Roca</span><span>@juliar</span><span class="dot"></span><span>12m</span>
+              </div>
+              <div class="content">Just finished the EPAW lab 3 with my team — the AJAX nested comments turned out way cleaner than I expected. Anyone else done? 🚀</div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 6</div>
+                <div class="act liked"><i class="fa-solid fa-heart"></i> 24</div>
+                <div class="act"><i class="fa-solid fa-share"></i> Share</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-green">P</div>
+            <div class="body">
+              <div class="head"><span class="name">Pau Vidal</span><span>@pauv</span><span class="dot"></span><span>1h</span></div>
+              <div class="content">Hot take: dark mode designs are usually easier to read than light ones, you just have to manage contrast. Change my mind.</div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 41</div>
+                <div class="act"><i class="fa-regular fa-heart"></i> 87</div>
+                <div class="act"><i class="fa-solid fa-share"></i> Share</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-violet">A</div>
+            <div class="body">
+              <div class="head"><span class="name">Anna Cortés</span><span>@annac</span><span class="dot"></span><span>3h</span></div>
+              <div class="content">Servlets are not glamorous but oh boy do they get the job done. Sticking with them for this whole semester 💪</div>
+              <div class="media"></div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 3</div>
+                <div class="act"><i class="fa-regular fa-heart"></i> 12</div>
+                <div class="act"><i class="fa-solid fa-share"></i> Share</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- right -->
+      <div>
+        <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input placeholder="Search Chirp"></div>
+        <div class="card who-card">
+          <div class="title">
+            <h3 class="card-title">Popular voices</h3>
+            <p class="card-sub">Sign in to follow them</p>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-violet">M</div>
+            <div class="meta"><b>Marc Puig</b><span>@marcp · 4.2K followers</span></div>
+            <button class="btn sm ghost">View</button>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-amber">L</div>
+            <div class="meta"><b>Laura Martí</b><span>@lauram · 2.8K followers</span></div>
+            <button class="btn sm ghost">View</button>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-teal">N</div>
+            <div class="meta"><b>Nil Garcia</b><span>@nilg · 1.6K followers</span></div>
+            <button class="btn sm ghost">View</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 02 · LOGIN / REGISTER ========== -->
+  <div class="frame-label">02 · Sign up / log in</div>
+  <div class="frame">
+    <div class="auth-wrap">
+      <!-- LEFT: hero -->
+      <div class="auth-hero">
+        <div class="logo-mark">C</div>
+        <h1>Happening now.<br>Join Chirp.</h1>
+        <p>Share what's on your mind, follow people you care about, and discover what's trending in the EPAW community.</p>
+        <ul>
+          <li><i class="fa-solid fa-check"></i> Post, reply, like and discover</li>
+          <li><i class="fa-solid fa-check"></i> Follow your classmates and build your timeline</li>
+          <li><i class="fa-solid fa-check"></i> 100% open — no algorithms tracking you</li>
+        </ul>
+      </div>
+      <!-- RIGHT: form -->
+      <div class="auth-form-wrap">
+        <div class="auth-tabs">
+          <button class="active">Sign up</button>
+          <button>Log in</button>
+        </div>
+        <div class="auth-form">
+          <h2>Create your account</h2>
+          <p class="sub">Free forever. No credit card.</p>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Name</label>
+              <input value="Melker Svensson">
+            </div>
+            <div class="field-group">
+              <label>Username</label>
+              <input value="@melker">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Email</label>
+            <input value="melker@upf.edu" type="email">
+          </div>
+          <div class="field-group">
+            <label>Password</label>
+            <input value="••••••••••" type="password">
+            <span class="hint">At least 8 characters, with one number.</span>
+          </div>
+          <button class="btn lg full">Create account</button>
+          <p class="auth-foot">Already have an account? <a>Log in</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 03 · LOGGED-IN HOME FEED ========== -->
+  <div class="frame-label">03 · Home feed (logged in)</div>
+  <div class="frame">
+    <div class="cols" style="padding-top: 16px">
+      <!-- LEFT NAV -->
+      <div class="col-left">
+        <div class="nav">
+          <div class="logo">
+            <div class="logo-mark">C</div>
+            <div class="logo-word">Chirp</div>
+          </div>
+          <div class="nav-item active"><i class="fa-solid fa-house"></i> Home</div>
+          <div class="nav-item"><i class="fa-solid fa-globe"></i> Global</div>
+          <div class="nav-item"><i class="fa-solid fa-user"></i> Profile</div>
+          <div class="nav-item"><i class="fa-solid fa-user-group"></i> Following</div>
+          <div class="nav-item"><i class="fa-solid fa-right-from-bracket"></i> Logout</div>
+          <button class="btn-tweet"><i class="fa-solid fa-feather"></i> &nbsp;Tweet</button>
+          <div class="spacer" style="min-height: 200px"></div>
+          <div class="user-chip">
+            <div class="avatar sm av-violet">M</div>
+            <div class="meta"><b>Melker</b><span>@melker</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- CENTER -->
+      <div>
+        <div class="card">
+          <div class="page-header">
+            <div class="titles">
+              <h1>Home</h1>
+              <p>Latest from people you follow</p>
+            </div>
+            <button class="btn">Friend feed</button>
+            <button class="btn ghost">Global</button>
+          </div>
+        </div>
+        <!-- compose -->
+        <div class="card">
+          <div class="compose">
+            <div class="avatar md av-violet">M</div>
+            <div class="field">
+              <div class="placeholder">What's happening?</div>
+              <div class="compose-bar">
+                <div class="tools">
+                  <i class="fa-regular fa-image"></i>
+                  <i class="fa-solid fa-square-poll-vertical"></i>
+                  <i class="fa-regular fa-face-smile"></i>
+                  <i class="fa-solid fa-calendar"></i>
+                </div>
+                <div class="spacer"></div>
+                <div class="count">280</div>
+                <button class="btn">Tweet</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- tweets -->
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-pink">J</div>
+            <div class="body">
+              <div class="head">
+                <span class="name">Júlia Roca</span><span>@juliar</span><span class="dot"></span><span>12m</span>
+                <span class="menu"><i class="fa-solid fa-ellipsis"></i></span>
+              </div>
+              <div class="content">Just finished the EPAW lab 3 with my team — the AJAX nested comments turned out way cleaner than I expected. Anyone else done? 🚀</div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 6</div>
+                <div class="act liked"><i class="fa-solid fa-heart"></i> 24</div>
+                <div class="act"><i class="fa-solid fa-share"></i> Share</div>
+              </div>
+              <div class="replies">
+                <div class="tweet">
+                  <div class="avatar sm av-violet">M</div>
+                  <div class="body">
+                    <div class="head"><span class="name">Melker</span><span>@melker</span><span class="dot"></span><span>8m</span></div>
+                    <div class="content">Same! Took us a bit to get the nested rendering right but worth it 🙌</div>
+                    <div class="actions">
+                      <div class="act"><i class="fa-regular fa-comment"></i> 1</div>
+                      <div class="act liked"><i class="fa-solid fa-heart"></i> 4</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tweet">
+                  <div class="avatar sm av-amber">L</div>
+                  <div class="body">
+                    <div class="head"><span class="name">Laura Martí</span><span>@lauram</span><span class="dot"></span><span>5m</span></div>
+                    <div class="content">Could you share your approach for the AJAX reload? Mine flashes the whole feed.</div>
+                    <div class="actions">
+                      <div class="act"><i class="fa-regular fa-comment"></i> 0</div>
+                      <div class="act"><i class="fa-regular fa-heart"></i> 1</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-green">P</div>
+            <div class="body">
+              <div class="head"><span class="name">Pau Vidal</span><span>@pauv</span><span class="dot"></span><span>1h</span>
+                <span class="menu"><i class="fa-solid fa-ellipsis"></i></span>
+              </div>
+              <div class="content">Hot take: dark mode designs are usually easier to read than light ones, you just have to manage contrast. Change my mind.</div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 41</div>
+                <div class="act"><i class="fa-regular fa-heart"></i> 87</div>
+                <div class="act"><i class="fa-solid fa-share"></i> Share</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-teal">N</div>
+            <div class="body">
+              <div class="head"><span class="name">Nil Garcia</span><span>@nilg</span><span class="dot"></span><span>3h</span>
+                <span class="menu"><i class="fa-solid fa-ellipsis"></i></span>
+              </div>
+              <div class="content">Working on my profile page tonight. Banner + avatar overlap is harder than it looks in plain CSS.</div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 3</div>
+                <div class="act"><i class="fa-regular fa-heart"></i> 9</div>
+                <div class="act"><i class="fa-solid fa-share"></i> Share</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT -->
+      <div>
+        <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input placeholder="Search users"></div>
+        <div class="card who-card">
+          <div class="title">
+            <h3 class="card-title">Who to follow</h3>
+            <p class="card-sub">Discover people you might like</p>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-violet">M</div>
+            <div class="meta"><b>Marc Puig</b><span>@marcp</span></div>
+            <button class="btn sm">Follow</button>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-amber">L</div>
+            <div class="meta"><b>Laura Martí</b><span>@lauram</span></div>
+            <button class="btn sm">Follow</button>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-pink">A</div>
+            <div class="meta"><b>Anna Cortés</b><span>@annac</span></div>
+            <button class="btn sm">Follow</button>
+          </div>
+          <div class="see-all">Show more</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 04 · PROFILE PAGE ========== -->
+  <div class="frame-label">04 · Profile page</div>
+  <div class="frame">
+    <div class="cols" style="padding-top: 16px">
+      <div class="col-left">
+        <div class="nav">
+          <div class="logo">
+            <div class="logo-mark">C</div>
+            <div class="logo-word">Chirp</div>
+          </div>
+          <div class="nav-item"><i class="fa-solid fa-house"></i> Home</div>
+          <div class="nav-item"><i class="fa-solid fa-globe"></i> Global</div>
+          <div class="nav-item active"><i class="fa-solid fa-user"></i> Profile</div>
+          <div class="nav-item"><i class="fa-solid fa-user-group"></i> Following</div>
+          <div class="nav-item"><i class="fa-solid fa-right-from-bracket"></i> Logout</div>
+          <button class="btn-tweet"><i class="fa-solid fa-feather"></i> &nbsp;Tweet</button>
+          <div class="spacer" style="min-height: 200px"></div>
+          <div class="user-chip">
+            <div class="avatar sm av-violet">M</div>
+            <div class="meta"><b>Melker</b><span>@melker</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- banner + head -->
+        <div>
+          <div class="profile-banner"></div>
+          <div class="profile-head">
+            <div class="av-wrap">
+              <div class="avatar xl av-violet">M</div>
+              <div class="actions">
+                <button class="btn ghost"><i class="fa-regular fa-envelope"></i></button>
+                <button class="btn"><i class="fa-solid fa-pen-to-square"></i> &nbsp;Edit profile</button>
+              </div>
+            </div>
+            <div class="profile-bio">
+              <h2>Melker Svensson</h2>
+              <div class="handle">@melker</div>
+              <p class="desc">Computer engineering student at UPF · building things on the web · learning servlets, AJAX and CSS the hard way 😅</p>
+              <div class="profile-meta">
+                <span><i class="fa-solid fa-location-dot"></i> Barcelona, Spain</span>
+                <span><i class="fa-solid fa-link"></i> github.com/melkersvensson02</span>
+                <span><i class="fa-solid fa-calendar"></i> Joined March 2026</span>
+              </div>
+              <div class="profile-stats">
+                <span><b>128</b> Following</span>
+                <span><b>342</b> Followers</span>
+                <span><b>56</b> Tweets</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- tabs -->
+        <div class="profile-tabs">
+          <div class="active">Tweets</div>
+          <div>Replies</div>
+          <div>Likes</div>
+          <div>Media</div>
+        </div>
+        <!-- tweets -->
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-violet">M</div>
+            <div class="body">
+              <div class="head">
+                <span class="name">Melker Svensson</span><span>@melker</span><span class="dot"></span><span>2h</span>
+                <span class="menu"><i class="fa-solid fa-ellipsis"></i></span>
+              </div>
+              <div class="content">Finally got the dark mode mockups for the final lab looking decent. Now to actually implement it 😬</div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 4</div>
+                <div class="act liked"><i class="fa-solid fa-heart"></i> 18</div>
+                <div class="act"><i class="fa-solid fa-share"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-violet">M</div>
+            <div class="body">
+              <div class="head"><span class="name">Melker Svensson</span><span>@melker</span><span class="dot"></span><span>1d</span>
+                <span class="menu"><i class="fa-solid fa-ellipsis"></i></span>
+              </div>
+              <div class="content">Hot tip for the AJAX comments lab: use a single inner iterator div and just <code>.load()</code> the partial. Saved my sanity.</div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 2</div>
+                <div class="act"><i class="fa-regular fa-heart"></i> 11</div>
+                <div class="act"><i class="fa-solid fa-share"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tweet">
+            <div class="avatar md av-violet">M</div>
+            <div class="body">
+              <div class="head"><span class="name">Melker Svensson</span><span>@melker</span><span class="dot"></span><span>3d</span>
+                <span class="menu"><i class="fa-solid fa-ellipsis"></i></span>
+              </div>
+              <div class="content">Coffee count today: 3 ☕ Servlet count today: 12. Productivity index: questionable.</div>
+              <div class="actions">
+                <div class="act"><i class="fa-regular fa-comment"></i> 0</div>
+                <div class="act liked"><i class="fa-solid fa-heart"></i> 6</div>
+                <div class="act"><i class="fa-solid fa-share"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- right -->
+      <div>
+        <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input placeholder="Search users"></div>
+        <div class="card who-card">
+          <div class="title">
+            <h3 class="card-title">You might also know</h3>
+            <p class="card-sub">Based on people you follow</p>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-teal">N</div>
+            <div class="meta"><b>Nil Garcia</b><span>@nilg</span></div>
+            <button class="btn sm">Follow</button>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-red">R</div>
+            <div class="meta"><b>Roger Bosch</b><span>@rogerb</span></div>
+            <button class="btn sm">Follow</button>
+          </div>
+          <div class="who-row">
+            <div class="avatar sm av-green">P</div>
+            <div class="meta"><b>Pau Vidal</b><span>@pauv</span></div>
+            <button class="btn sm ghost">Following</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 05 · ADMIN PANEL ========== -->
+  <div class="frame-label">05 · Admin panel</div>
+  <div class="frame">
+    <div class="cols" style="padding-top: 16px">
+      <div class="col-left">
+        <div class="nav">
+          <div class="logo">
+            <div class="logo-mark" style="background:linear-gradient(135deg,#EF4444,#F91880)">A</div>
+            <div class="logo-word">Admin</div>
+          </div>
+          <div class="nav-item active"><i class="fa-solid fa-users"></i> Users</div>
+          <div class="nav-item"><i class="fa-solid fa-comment-dots"></i> Tweets</div>
+          <div class="nav-item"><i class="fa-solid fa-arrow-left"></i> Back to app</div>
+          <div class="spacer" style="min-height: 280px"></div>
+          <div class="user-chip">
+            <div class="avatar sm av-red">A</div>
+            <div class="meta"><b>Admin</b><span>@admin</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="grid-column: 2 / span 2;">
+        <div class="admin-header">
+          <div>
+            <h1>Moderation dashboard</h1>
+            <p>Manage user accounts, profiles and posts</p>
+          </div>
+          <div style="margin-left:auto" class="badge">Admin only</div>
+        </div>
+        <div class="card table-card">
+          <div class="table-head">
+            <h2>Users</h2>
+            <div class="filter">
+              <button class="btn sm">All</button>
+              <button class="btn sm ghost">Active</button>
+              <button class="btn sm ghost">Banned</button>
+              <div class="search" style="margin:0;padding:6px 14px"><i class="fa-solid fa-magnifying-glass"></i><input placeholder="Search user…"></div>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-pink">J</div>
+            <div class="uinfo"><b>Júlia Roca</b><span>@juliar · 24 tweets</span></div>
+            <span class="status ok">Active</span>
+            <span class="when">12m ago</span>
+            <div class="row-actions">
+              <button class="icon-btn" title="View"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn danger" title="Ban"><i class="fa-solid fa-ban"></i></button>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-green">P</div>
+            <div class="uinfo"><b>Pau Vidal</b><span>@pauv · 132 tweets</span></div>
+            <span class="status ok">Active</span>
+            <span class="when">1h ago</span>
+            <div class="row-actions">
+              <button class="icon-btn"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn danger"><i class="fa-solid fa-ban"></i></button>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-amber">L</div>
+            <div class="uinfo"><b>Laura Martí</b><span>@lauram · 7 tweets</span></div>
+            <span class="status warn">Reported</span>
+            <span class="when">3h ago</span>
+            <div class="row-actions">
+              <button class="icon-btn"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn danger"><i class="fa-solid fa-ban"></i></button>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-red">R</div>
+            <div class="uinfo"><b>Roger Bosch</b><span>@rogerb · 421 tweets</span></div>
+            <span class="status banned">Banned</span>
+            <span class="when">2d ago</span>
+            <div class="row-actions">
+              <button class="icon-btn"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn" title="Unban" style="background:rgba(0,186,124,.15);color:var(--success)"><i class="fa-solid fa-rotate-left"></i></button>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-teal">N</div>
+            <div class="uinfo"><b>Nil Garcia</b><span>@nilg · 58 tweets</span></div>
+            <span class="status ok">Active</span>
+            <span class="when">just now</span>
+            <div class="row-actions">
+              <button class="icon-btn"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn danger"><i class="fa-solid fa-ban"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="card table-card" style="margin-top: 16px">
+          <div class="table-head">
+            <h2>Tweets</h2>
+            <div class="filter">
+              <button class="btn sm">All</button>
+              <button class="btn sm ghost">Most liked</button>
+              <button class="btn sm ghost">Reported</button>
+              <div class="search" style="margin:0;padding:6px 14px"><i class="fa-solid fa-magnifying-glass"></i><input placeholder="Search tweet…"></div>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-pink">J</div>
+            <div class="uinfo"><b>"Just finished the EPAW lab 3 with my team — the AJAX nested..."</b><span>@juliar · 24 likes · 6 replies</span></div>
+            <span class="status ok">Visible</span>
+            <span class="when">12m ago</span>
+            <div class="row-actions">
+              <button class="icon-btn" title="View"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-green">P</div>
+            <div class="uinfo"><b>"Hot take: dark mode designs are usually easier to read..."</b><span>@pauv · 87 likes · 41 replies</span></div>
+            <span class="status ok">Visible</span>
+            <span class="when">1h ago</span>
+            <div class="row-actions">
+              <button class="icon-btn"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn danger"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-amber">L</div>
+            <div class="uinfo"><b>"Insulting language towards another user..."</b><span>@lauram · 0 likes · 2 replies</span></div>
+            <span class="status warn">Reported</span>
+            <span class="when">3h ago</span>
+            <div class="row-actions">
+              <button class="icon-btn"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn danger"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-red">R</div>
+            <div class="uinfo"><b>"This is borderline spam content..."</b><span>@rogerb · 2 likes · 0 replies</span></div>
+            <span class="status banned">Removed</span>
+            <span class="when">2d ago</span>
+            <div class="row-actions">
+              <button class="icon-btn"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn" title="Restore" style="background:rgba(0,186,124,.15);color:var(--success)"><i class="fa-solid fa-rotate-left"></i></button>
+            </div>
+          </div>
+          <div class="user-row">
+            <div class="avatar sm av-teal">N</div>
+            <div class="uinfo"><b>"Working on my profile page tonight. Banner + avatar..."</b><span>@nilg · 9 likes · 3 replies</span></div>
+            <span class="status ok">Visible</span>
+            <span class="when">just now</span>
+            <div class="row-actions">
+              <button class="icon-btn"><i class="fa-regular fa-eye"></i></button>
+              <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button class="icon-btn danger"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
