@@ -17,6 +17,11 @@ public class Timeline extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		jakarta.servlet.http.HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("user") == null) {
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+			return;
+		}
 		request.getRequestDispatcher("Timeline.jsp").forward(request, response);
 	}
 

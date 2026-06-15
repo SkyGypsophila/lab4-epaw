@@ -179,4 +179,46 @@ public class UserService {
             return null;
         }
     }
+
+    public User getUserById(Integer id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public void updateUser(User user) {
+        userRepository.update(user);
+    }
+
+    public Map<String, String> validateProfileUpdate(User user) {
+        Map<String, String> errors = new java.util.HashMap<>();
+
+        // Validate Name
+        String name = user.getName();
+        if (name == null || name.trim().isEmpty()) {
+            errors.put("name", "Username cannot be empty.");
+        } else if (name.length() < 5 || name.length() > 20) {
+            errors.put("name", "Username must be between 5 and 20 characters.");
+        } else {
+            Optional<User> existingUser = userRepository.findByName(name);
+            if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
+                errors.put("name", "Username already exists.");
+            }
+        }
+
+        // Validate Email
+        if (user.getEmail() == null || !user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            errors.put("email", "The email format is not valid.");
+        } else if (userRepository.existsByEmailAndNotId(user.getEmail(), user.getId())) {
+            errors.put("email", "Email already registered.");
+        }
+
+        // Validate Nickname
+        if (user.getNickname() == null || user.getNickname().trim().isEmpty()) {
+            errors.put("nickname", "Nickname cannot be empty.");
+        } else if (userRepository.existsByNicknameAndNotId(user.getNickname(), user.getId())) {
+            errors.put("nickname", "Nickname already taken.");
+        }
+
+        return errors;
+    }
 }
+

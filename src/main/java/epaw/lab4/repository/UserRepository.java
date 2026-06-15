@@ -66,6 +66,38 @@ public class UserRepository extends BaseRepository {
         return false;
     }
 
+    public boolean existsByEmailAndNotId(String email, Integer id) {
+        String query = "SELECT COUNT(*) FROM users WHERE email = ? AND id <> ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setString(1, email);
+            statement.setInt(2, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean existsByNicknameAndNotId(String nickname, Integer id) {
+        String query = "SELECT COUNT(*) FROM users WHERE nickname = ? AND id <> ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setString(1, nickname);
+            statement.setInt(2, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean checkLogin(User user) {
         String query = "SELECT u.id, u.picture, u.role_id, u.email, u.surname, u.nickname, u.birth_date, u.favorite_game, u.created_at, r.name AS role_name FROM users u INNER JOIN roles r ON u.role_id = r.role_id WHERE u.name = ? AND u.password = ?";
         try (PreparedStatement statement = db.prepareStatement(query)) {
@@ -104,6 +136,20 @@ public class UserRepository extends BaseRepository {
             statement.setString(7, user.getPicture());
             statement.setString(8, user.getBirthDate());
             statement.setString(9, user.getFavoriteGame());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(User user) {
+        String query = "UPDATE users SET name = ?, nickname = ?, email = ?, favorite_game = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getNickname());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getFavoriteGame());
+            statement.setInt(5, user.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

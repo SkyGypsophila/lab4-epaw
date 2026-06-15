@@ -12,6 +12,11 @@ public class Feed extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		jakarta.servlet.http.HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("user") == null) {
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+			return;
+		}
 		request.getRequestDispatcher("Feed.jsp").forward(request, response);
 	}
 

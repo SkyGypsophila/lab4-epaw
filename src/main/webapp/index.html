@@ -93,11 +93,22 @@
 			});
 			/* Delete tweet */
 			$(document).on("click", ".delTweet", function(event) {
-				var tweet = $(this).parent();
+				var tweetId = $(this).parent().attr("id");
 				$.post("DelTweet", {
-					id : $(this).parent().attr("id")
-				}, function(event) {
-					$("#content").load("Timeline");
+					id : tweetId
+				}, function() {
+					if ($("#feedIterator").length) {
+						$("#feedIterator").load("FeedTweets");
+					} else if ($("#iterator").length) {
+						$("#iterator").load("Tweets");
+					} else if ($("#globalFeedIterator").length) {
+						$("#globalFeedIterator").load("GlobalFeedTweets");
+					} else if ($("#userWallIterator").length) {
+						var userWallId = $("#userWallId").val();
+						$("#userWallIterator").load("UserWallTweets?id=" + userWallId);
+					} else {
+						$("#content").load("Timeline");
+					}
 				});
 				event.preventDefault();
 			});
@@ -162,6 +173,87 @@
 						}
 					});
 				}
+			});
+
+			/* Toggle edit profile form */
+			$(document).on("click", "#editProfileBtn", function(event) {
+				$("#profileViewDiv").hide();
+				$("#profileEditDiv").show();
+				event.preventDefault();
+			});
+
+			/* Cancel edit profile */
+			$(document).on("click", "#cancelEditProfile", function(event) {
+				$("#profileEditDiv").hide();
+				$("#profileViewDiv").show();
+				event.preventDefault();
+			});
+
+			/* Save profile edits via AJAX */
+			$(document).on("submit", "#editProfileForm", function(event) {
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				
+				var form = this;
+				var data = {
+					name: $("#editName").val(),
+					nickname: $("#editNickname").val(),
+					email: $("#editEmail").val(),
+					favoriteGame: $("#editFavoriteGame").val()
+				};
+				
+				$.post("UpdateProfile", data, function(response) {
+					if (response.success) {
+						$("#lcolumn").load("Profile");
+						$("#navigation").load("Menu");
+					} else {
+						$(".profile-error").text(""); // Clear previous errors
+						if (response.errors) {
+							for (var key in response.errors) {
+								$("#error-" + key).text(response.errors[key]);
+							}
+						}
+					}
+				});
+			});
+
+			/* Show edit tweet container */
+			$(document).on("click", ".editTweetBtn", function(event) {
+				var tweetDiv = $(this).closest(".w3-card");
+				tweetDiv.find(".tweetText").hide();
+				tweetDiv.find(".editTweetContainer").show();
+				event.preventDefault();
+			});
+
+			/* Cancel edit tweet */
+			$(document).on("click", ".cancelTweetEdit", function(event) {
+				var tweetDiv = $(this).closest(".w3-card");
+				tweetDiv.find(".editTweetContainer").hide();
+				tweetDiv.find(".tweetText").show();
+				event.preventDefault();
+			});
+
+			/* Save tweet edit via AJAX */
+			$(document).on("click", ".saveTweetEdit", function(event) {
+				var tweetDiv = $(this).closest(".w3-card");
+				var id = tweetDiv.attr("id");
+				var content = tweetDiv.find(".editTweetText").val();
+				$.post("EditTweet", {
+					id: id,
+					content: content
+				}, function() {
+					if ($("#feedIterator").length) {
+						$("#feedIterator").load("FeedTweets");
+					} else if ($("#iterator").length) {
+						$("#iterator").load("Tweets");
+					} else if ($("#globalFeedIterator").length) {
+						$("#globalFeedIterator").load("GlobalFeedTweets");
+					} else if ($("#userWallIterator").length) {
+						var userWallId = $("#userWallId").val();
+						$("#userWallIterator").load("UserWallTweets?id=" + userWallId);
+					}
+				});
+				event.preventDefault();
 			});
 
 		};

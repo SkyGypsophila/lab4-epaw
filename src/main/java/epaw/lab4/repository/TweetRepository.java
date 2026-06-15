@@ -54,22 +54,69 @@ public class TweetRepository extends BaseRepository {
         }
     }
 
+    public void deleteUnrestricted(Integer tweetId) {
+        String query = "DELETE FROM tweets WHERE tweet_id = ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setInt(1, tweetId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(Integer tweetId, String content) {
+        String query = "UPDATE tweets SET content = ? WHERE tweet_id = ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setString(1, content);
+            statement.setInt(2, tweetId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Optional<Tweet> findById(Integer tweetId) {
+        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, " +
+                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
+                "0 AS liked_by_user " +
+                "FROM tweets t INNER JOIN users u ON t.user_id = u.id " +
+                "WHERE t.tweet_id = ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setInt(1, tweetId);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapTweet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
     // AÑADIDO: AND t.parent_id IS NULL (Solo tweets principales)
     public Optional<List<Tweet>> findByUser(Integer userId, Integer start, Integer end) {
+        return findByUser(userId, userId, start, end);
+    }
+
+    // SOBRECARGADO: Para poder ver los tweets de otro usuario con el estado de like de un visualizador
+    public Optional<List<Tweet>> findByUser(Integer authorId, Integer viewerId, Integer start, Integer end) {
         List<Tweet> tweets = new ArrayList<>();
-        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, " +
+        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user " +
                 "FROM tweets t INNER JOIN users u ON t.user_id = u.id " +
                 "WHERE t.user_id = ? AND t.parent_id IS NULL ORDER BY t.created_at DESC LIMIT ?, ?";
         try (PreparedStatement statement = db.prepareStatement(query)) {
-            statement.setInt(1, userId); 
-            statement.setInt(2, userId);
+            statement.setInt(1, viewerId); 
+            statement.setInt(2, authorId);
             statement.setInt(3, start);
             statement.setInt(4, end);
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
-                    tweets.add(mapTweet(rs));
+                    Tweet tweet = mapTweet(rs);
+                    tweet.setUpicture(rs.getString("picture"));
+                    tweets.add(tweet);
                 }
                 return Optional.of(tweets);
             }

@@ -29,13 +29,28 @@ public class TweetService {
 		tweetRepository.delete(id, uid);
 	}
 
+	public void deleteUnrestricted(Integer id) {
+		tweetRepository.deleteUnrestricted(id);
+	}
+
+	public void update(Integer id, String content) {
+		tweetRepository.update(id, content);
+	}
+
+	public Tweet getTweetById(Integer id) {
+		return tweetRepository.findById(id).orElse(null);
+	}
+
 	public List<Tweet> getTweetsByUser(Integer uid, Integer start, Integer end) {
-		Optional<List<Tweet>> tweets = tweetRepository.findByUser(uid, start, end);
+		return getTweetsByUser(uid, uid, start, end);
+	}
+
+	public List<Tweet> getTweetsByUser(Integer uid, Integer viewerId, Integer start, Integer end) {
+		Optional<List<Tweet>> tweets = tweetRepository.findByUser(uid, viewerId, start, end);
 		if (tweets.isPresent()) {
 			List<Tweet> list = tweets.get();
-			// Por cada tweet, le asignamos sus comentarios
 			for (Tweet t : list) {
-				t.setComments(tweetRepository.findReplies(t.getId(), uid));
+				t.setComments(tweetRepository.findReplies(t.getId(), viewerId));
 			}
 			return list;
 		}
