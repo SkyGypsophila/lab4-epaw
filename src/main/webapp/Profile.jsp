@@ -24,7 +24,8 @@
     <c:if test="${not empty user.role}">
       <p class="w3-left-align"><i class="fa fa-shield fa-fw w3-margin-right"></i> ${user.role}</p>
     </c:if>
-    <button type="button" id="editProfileBtn" class="w3-button w3-theme w3-round w3-small" style="width:100%;"><i class="fa fa-pencil"></i> Edit Profile</button>
+    <button type="button" id="editProfileBtn" class="w3-button w3-theme w3-round w3-small w3-margin-bottom" style="width:100%;"><i class="fa-solid fa-pencil"></i> Edit Profile</button>
+    <a href="Followed" class="menu w3-button w3-block w3-theme-l4 w3-round w3-small w3-left-align" style="width:100%; text-decoration:none; margin-top:5px;"><i class="fa-solid fa-users w3-margin-right"></i> Following / Buddies</a>
   </div>
 
   <div id="profileEditDiv" style="display:none; text-align: left; padding: 10px 0;">

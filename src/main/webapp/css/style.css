@@ -1,9 +1,116 @@
-@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-input.w3-input:valid {
-	border-left: 4px solid green !important;
+/* Global Font Overrides */
+body, h1, h2, h3, h4, h5, h6, input, button, select, textarea {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
 }
 
+/* Base Body Dark Palette */
+body {
+    background: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #1e1b4b 100%) !important;
+    background-attachment: fixed !important;
+    color: #f1f5f9 !important;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* Glassmorphism Cards & Panels */
+.w3-white, .w3-card, .w3-panel, .w3-card-4, .w3-card-2 {
+    background-color: rgba(17, 24, 39, 0.75) !important;
+    color: #f1f5f9 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-radius: 12px !important;
+}
+
+/* Navigation Top Bar */
+.w3-top {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+.w3-theme {
+    background-color: rgba(15, 23, 42, 0.9) !important;
+    color: #f1f5f9 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Buttons Styling */
+.w3-button {
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease-in-out !important;
+}
+.w3-button.w3-theme {
+    background-color: #6366f1 !important; /* Indigo 500 */
+    color: #ffffff !important;
+    border: none !important;
+}
+.w3-button.w3-theme:hover {
+    background-color: #4f46e5 !important; /* Indigo 600 */
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
+.w3-button.w3-red {
+    background-color: #ef4444 !important;
+}
+.w3-button.w3-red:hover {
+    background-color: #dc2626 !important;
+}
+.w3-button.w3-green {
+    background-color: #10b981 !important;
+}
+.w3-button.w3-green:hover {
+    background-color: #059669 !important;
+}
+.w3-button.w3-blue {
+    background-color: #3b82f6 !important;
+}
+.w3-button.w3-blue:hover {
+    background-color: #2563eb !important;
+}
+
+/* Inputs & Form Elements */
+input.w3-input, textarea.w3-input, .w3-border, [contenteditable="true"] {
+    background-color: rgba(30, 41, 59, 0.6) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+input.w3-input:focus, textarea.w3-input:focus, [contenteditable="true"]:focus {
+    outline: none !important;
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.3) !important;
+}
+input.w3-input:valid {
+    border-left: 4px solid #10b981 !important;
+}
 input.w3-input:invalid {
-	border-left: 4px solid red !important;
+    border-left: 4px solid #ef4444 !important;
+}
+
+/* Text & Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+}
+.w3-opacity {
+    color: #94a3b8 !important;
+}
+
+/* Nested lists/comments */
+.w3-light-grey {
+    background-color: rgba(30, 41, 59, 0.4) !important;
+    border-color: rgba(99, 102, 241, 0.4) !important;
+}
+
+/* Link overrides */
+a.w3-hover-text-theme:hover {
+    color: #818cf8 !important; /* Indigo 400 */
+}
+
+/* Footer Styling */
+footer.w3-bottom {
+    background-color: rgba(15, 23, 42, 0.95) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
