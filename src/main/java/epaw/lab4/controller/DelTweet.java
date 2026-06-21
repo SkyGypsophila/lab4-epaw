@@ -32,11 +32,12 @@ public class DelTweet extends HttpServlet {
 					Tweet tweet = new Tweet();
 					BeanUtils.populate(tweet, request.getParameterMap());
 					TweetService tweetService = TweetService.getInstance();
+					String webappRoot = getServletContext().getRealPath("/");
 					boolean isAdmin = user.getRole() != null && user.getRole().equalsIgnoreCase("ADMINISTRATOR");
 					if (isAdmin) {
-						tweetService.deleteUnrestricted(tweet.getId());
+						tweetService.deleteUnrestricted(tweet.getId(), webappRoot);
 					} else {
-						tweetService.delete(tweet.getId(), user.getId());
+						tweetService.delete(tweet.getId(), user.getId(), webappRoot);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

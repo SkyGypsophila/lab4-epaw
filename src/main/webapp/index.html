@@ -102,14 +102,48 @@
 				});
 				event.preventDefault();
 			});
+			/* Image file selected for new tweet */
+			$(document).on("change", "#tweetImageInput", function() {
+				var file = this.files[0];
+				if (file) {
+					$("#tweetImageName").text(file.name);
+					$("#clearTweetImage").show();
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						$("#tweetImgPreviewImg").attr("src", e.target.result);
+						$("#tweetImgPreview").show();
+					};
+					reader.readAsDataURL(file);
+				}
+			});
+
+			/* Clear selected image for new tweet */
+			$(document).on("click", "#clearTweetImage", function() {
+				$("#tweetImageInput").val("");
+				$("#tweetImageName").text("");
+				$("#clearTweetImage").hide();
+				$("#tweetImgPreview").hide();
+				$("#tweetImgPreviewImg").attr("src", "");
+			});
+
 			/* Add tweet */
 			$(document).on("click", "#addTweet", function(event) {
-				$.post("AddTweet", {
-					content : $("#tweetContent").text()
-				}, function(event) {
+				event.preventDefault();
+				var fd = new FormData();
+				fd.append("content", $("#tweetContent").text());
+				var fileInput = document.getElementById("tweetImageInput");
+				if (fileInput && fileInput.files.length > 0) {
+					fd.append("tweetImage", fileInput.files[0]);
+				}
+				$.ajax({
+					type: "POST",
+					url: "AddTweet",
+					data: fd,
+					processData: false,
+					contentType: false
+				}).done(function() {
 					$("#content").load("Timeline");
 				});
-				event.preventDefault();
 			});
 			/* Delete tweet */
 			$(document).on("click", ".delTweet", function(event) {
@@ -238,27 +272,45 @@
 				event.preventDefault();
 			});
 
-			/* Save tweet edit via AJAX */
+			/* Edit tweet image file selected */
+			$(document).on("change", ".editTweetImage", function() {
+				var name = this.files[0] ? this.files[0].name : "";
+				$(this).closest(".editTweetContainer").find(".editImgName").text(name);
+			});
+
+			/* Save tweet edit via AJAX (multipart to support image replace/remove) */
 			$(document).on("click", ".saveTweetEdit", function(event) {
+				event.preventDefault();
 				var tweetDiv = $(this).closest(".w3-card");
 				var id = tweetDiv.attr("id");
 				var content = tweetDiv.find(".editTweetText").val();
-				$.post("EditTweet", {
-					id: id,
-					content: content
-				}, function() {
-					if ($("#feedIterator").length) {
-						$("#feedIterator").load("FeedTweets");
-					} else if ($("#iterator").length) {
-						$("#iterator").load("Tweets");
-					} else if ($("#globalFeedIterator").length) {
-						$("#globalFeedIterator").load("GlobalFeedTweets");
-					} else if ($("#userWallIterator").length) {
-						var userWallId = $("#userWallId").val();
-						$("#userWallIterator").load("UserWallTweets?id=" + userWallId);
-					}
+				var removeImage = tweetDiv.find(".removeImageCheck").is(":checked");
+				var fileInput = tweetDiv.find(".editTweetImage")[0];
+				var fd = new FormData();
+				fd.append("id", id);
+				fd.append("content", content);
+				fd.append("removeImage", removeImage ? "true" : "false");
+				if (fileInput && fileInput.files.length > 0) {
+					fd.append("tweetImage", fileInput.files[0]);
+				}
+				$.ajax({
+					type: "POST",
+					url: "EditTweet",
+					data: fd,
+					processData: false,
+					contentType: false
+				}).done(function() {
+					App.reloadTweets();
 				});
+			});
+
+			/* Admin remove tweet image */
+			$(document).on("click", ".removeImageBtn", function(event) {
 				event.preventDefault();
+				var id = $(this).closest("[id]").attr("id");
+				$.post("RemoveTweetImage", { id: id }, function() {
+					App.reloadTweets();
+				});
 			});
 
 		};

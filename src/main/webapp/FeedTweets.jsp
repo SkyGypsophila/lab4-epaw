@@ -27,8 +27,29 @@
 
       <p class="tweetText content">${t.content}</p>
 
+      <c:if test="${not empty t.image}">
+        <div class="tweet-img-wrap">
+          <img src="${t.image}" alt="Tweet image">
+        </div>
+      </c:if>
+
       <div class="editTweetContainer" style="display:none; margin-bottom: 10px;">
         <textarea class="editTweetText w3-input w3-border w3-round">${t.content}</textarea>
+        <c:if test="${not empty t.image}">
+          <div class="current-img-row" style="margin-top:8px; display:flex; align-items:center; gap:8px;">
+            <img src="${t.image}" alt="" style="height:48px; width:72px; object-fit:cover; border-radius:6px;">
+            <label style="display:flex; align-items:center; gap:4px; cursor:pointer;">
+              <input type="checkbox" class="removeImageCheck"> Remove image
+            </label>
+          </div>
+        </c:if>
+        <div style="margin-top:8px;">
+          <label class="btn sm ghost" style="cursor:pointer;">
+            <i class="fa-solid fa-image"></i> Replace image
+            <input type="file" class="editTweetImage" accept=".jpg,.jpeg,.svg" style="display:none">
+          </label>
+          <span class="editImgName muted" style="font-size:0.8em; margin-left:6px;"></span>
+        </div>
         <div class="actions" style="margin-top:8px;">
           <button type="button" class="saveTweetEdit act"><i class="fa-solid fa-check"></i> Save</button>
           <button type="button" class="cancelTweetEdit act"><i class="fa-solid fa-xmark"></i> Cancel</button>
@@ -49,6 +70,9 @@
         <c:if test="${t.uid == sessionScope.user.id || sessionScope.user.role == 'ADMINISTRATOR'}">
           <button type="button" class="editTweetBtn act edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
           <button type="button" class="delTweet act danger"><i class="fa-solid fa-trash"></i> Delete</button>
+        </c:if>
+        <c:if test="${sessionScope.user.role == 'ADMINISTRATOR' && not empty t.image}">
+          <button type="button" class="removeImageBtn act danger"><i class="fa-solid fa-image"></i> Remove image</button>
         </c:if>
       </div>
 

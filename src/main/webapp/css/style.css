@@ -329,6 +329,21 @@ footer.w3-bottom p { color: var(--muted) !important; }
 .cta-banner .btn { background: #fff; color: var(--accent); }
 .cta-banner .btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
 
+/* ===================== TWEET IMAGE ===================== */
+.tweet-img-wrap {
+  width: 100%;
+  height: 260px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.tweet-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 /* ===================== MISC ===================== */
 .empty-state { text-align: center; color: var(--muted); padding: 28px 16px; }
 .empty-state i { font-size: 22px; display: block; margin-bottom: 8px; color: var(--muted); }

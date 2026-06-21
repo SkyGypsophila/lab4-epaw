@@ -19,6 +19,7 @@ public class Tweet implements java.io.Serializable {
 	private int likeCount;
 	private boolean liked;
 	private boolean banned;
+	private String image;
 
 	// NUEVO: Lista para guardar los comentarios anidados
 	private List<Tweet> comments = new ArrayList<>();
@@ -58,6 +59,9 @@ public class Tweet implements java.io.Serializable {
 
 	public boolean isBanned() { return banned; }
 	public void setBanned(boolean banned) { this.banned = banned; }
+
+	public String getImage() { return image; }
+	public void setImage(String image) { this.image = image; }
 
 	public String getFormattedTime() {
 		if (postDateTime == null) return "";

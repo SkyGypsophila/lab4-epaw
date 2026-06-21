@@ -30,19 +30,20 @@ public class TweetRepository extends BaseRepository {
         new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public void save(Tweet tweet) {
-        String query = "INSERT INTO tweets (user_id, content, created_at, parent_id) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO tweets (user_id, content, image, created_at, parent_id) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = db.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, tweet.getUid());
             statement.setString(2, tweet.getContent());
             String tsStr = tweet.getPostDateTime() != null
                 ? TS_FMT.format(tweet.getPostDateTime()) : null;
-            statement.setString(3, tsStr);
+            statement.setString(3, tweet.getImage());
+            statement.setString(4, tsStr);
 
             boolean hasParent = tweet.getParentId() != null && tweet.getParentId() > 0;
             if (hasParent) {
-                statement.setInt(4, tweet.getParentId());
+                statement.setInt(5, tweet.getParentId());
             } else {
-                statement.setNull(4, java.sql.Types.INTEGER);
+                statement.setNull(5, java.sql.Types.INTEGER);
             }
             statement.executeUpdate();
             try (ResultSet keys = statement.getGeneratedKeys()) {
@@ -51,9 +52,9 @@ public class TweetRepository extends BaseRepository {
                     tweet.setId(id);
                     String parentSql = hasParent ? String.valueOf(tweet.getParentId()) : "NULL";
                     DBLogger.append(
-                        "INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (" +
+                        "INSERT INTO tweets (tweet_id, user_id, content, image, created_at, parent_id) VALUES (" +
                         id + ", " + tweet.getUid() + ", " + DBLogger.q(tweet.getContent()) +
-                        ", " + DBLogger.q(tsStr) + ", " + parentSql + ")"
+                        ", " + DBLogger.q(tweet.getImage()) + ", " + DBLogger.q(tsStr) + ", " + parentSql + ")"
                     );
                 }
             }
@@ -98,7 +99,7 @@ public class TweetRepository extends BaseRepository {
     }
 
     public Optional<Tweet> findById(Integer tweetId) {
-        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, " +
+        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, t.image, u.name, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
                 "0 AS liked_by_user, " +
                 "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
@@ -125,7 +126,7 @@ public class TweetRepository extends BaseRepository {
     // SOBRECARGADO: Para poder ver los tweets de otro usuario con el estado de like de un visualizador
     public Optional<List<Tweet>> findByUser(Integer authorId, Integer viewerId, Integer start, Integer end) {
         List<Tweet> tweets = new ArrayList<>();
-        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
+        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, t.image, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user, " +
                 "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
@@ -153,7 +154,7 @@ public class TweetRepository extends BaseRepository {
     // AÑADIDO: AND t.parent_id IS NULL (Solo tweets principales)
     public Optional<List<Tweet>> findByFollowedUsers(Integer followerId, Integer start, Integer end) {
         List<Tweet> tweets = new ArrayList<>();
-        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
+        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, t.image, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user, " +
                 "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
@@ -184,7 +185,7 @@ public class TweetRepository extends BaseRepository {
     // NUEVO METODO PARA EL GLOBAL FEED
     public Optional<List<Tweet>> findAllGlobalTweets(Integer viewerId, Integer start, Integer end) {
         List<Tweet> tweets = new ArrayList<>();
-        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
+        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, t.image, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user, " +
                 "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
@@ -211,7 +212,7 @@ public class TweetRepository extends BaseRepository {
     // NUEVO METODO: Buscar respuestas (comentarios) de un tweet
     public List<Tweet> findReplies(Integer parentId, Integer viewerId) {
         List<Tweet> replies = new ArrayList<>();
-        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
+        String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, t.image, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user, " +
                 "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
@@ -273,6 +274,29 @@ public class TweetRepository extends BaseRepository {
         }
     }
 
+    public void updateImage(Integer tweetId, String imagePath) {
+        String query = "UPDATE tweets SET image = ? WHERE tweet_id = ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setString(1, imagePath);
+            statement.setInt(2, tweetId);
+            statement.executeUpdate();
+            DBLogger.append("UPDATE tweets SET image = " + DBLogger.q(imagePath) + " WHERE tweet_id = " + tweetId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeImage(Integer tweetId) {
+        String query = "UPDATE tweets SET image = NULL WHERE tweet_id = ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setInt(1, tweetId);
+            statement.executeUpdate();
+            DBLogger.append("UPDATE tweets SET image = NULL WHERE tweet_id = " + tweetId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Tweet mapTweet(ResultSet rs) throws SQLException {
         Tweet tweet = new Tweet();
         tweet.setId(rs.getInt("tweet_id"));
@@ -283,6 +307,7 @@ public class TweetRepository extends BaseRepository {
         tweet.setLikeCount(rs.getInt("like_count"));
         tweet.setLiked(rs.getInt("liked_by_user") > 0);
         tweet.setBanned(rs.getInt("is_banned") > 0);
+        tweet.setImage(rs.getString("image"));
         return tweet;
     }
 }

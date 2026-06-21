@@ -1,11 +1,13 @@
 package epaw.lab4.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 import epaw.lab4.service.TweetService;
 import epaw.lab4.model.Tweet;
 import epaw.lab4.model.User;
@@ -14,10 +16,8 @@ import java.sql.Timestamp;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-/**
- * Servlet implementation class AddTweet
- */
 @WebServlet("/AddTweet")
+@MultipartConfig(maxFileSize = 5 * 1024 * 1024)
 public class AddTweet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -42,7 +42,10 @@ public class AddTweet extends HttpServlet {
 					tweet.setUname(user.getName());
 					tweet.setPostDateTime(new Timestamp(System.currentTimeMillis()));
 					TweetService tweetService = TweetService.getInstance();
-					tweetService.add(tweet);
+					Part filePart = null;
+					try { filePart = request.getPart("tweetImage"); } catch (Exception ignored) {}
+					String imgDir = getServletContext().getRealPath("/img/tweets/");
+					tweetService.add(tweet, filePart, imgDir);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

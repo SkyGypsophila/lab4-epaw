@@ -51,6 +51,7 @@ CREATE TABLE tweets (
   parent_id INTEGER,
   game_discussion_id INTEGER,
   content TEXT NOT NULL,
+  image VARCHAR(255),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (parent_id) REFERENCES tweets(tweet_id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -157,3 +158,27 @@ UPDATE users SET name = 'Fabian', nickname = 'Fabbe09', email = 'fabian.sitges@g
 DELETE FROM tweets WHERE tweet_id = 12;
 INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (18, 8, 'Hi', '2026-06-21 17:07:28.403', NULL);
 INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (19, 6, 'Cool', '2026-06-21 17:10:51', NULL);
+INSERT INTO likes (user_id, tweet_id) VALUES (6, 18);
+INSERT INTO likes (user_id, tweet_id) VALUES (6, 17);
+INSERT INTO likes (user_id, tweet_id) VALUES (6, 4);
+INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (20, 6, 'WTF, ur aphelious is literal dog shit .... delusional players 4real', '2026-06-21 17:13:10', 17);
+UPDATE tweets SET content = 'Lets eradicate this place of those delulu players like @Fabian' WHERE tweet_id = 19;
+INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (21, 6, 'I like Björn', '2026-06-21 17:56:16', NULL);
+UPDATE users SET name = 'Melker', nickname = 'Melle02', email = 'melker.sitges@gmail.com', favorite_game = 'LOL, CS, and FlappinBrids', updated_at = CURRENT_TIMESTAMP WHERE id = 6;
+UPDATE tweets SET content = 'Lets eradicate from this place of delulu players like @Fabian' WHERE tweet_id = 19;
+UPDATE tweets SET content = 'Lets eradicate from this place delulu players like @Fabian' WHERE tweet_id = 19;
+INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (22, 1, 'Well said mate !', '2026-06-21 17:59:42', 19);
+INSERT INTO users (id, role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game, created_at, updated_at) VALUES (9, 1, 'pau@gmail.com', 'Pau2007', 'Cubarsí', 'Paui', 'Cubarsi123!', 'img/Pau2007.svg', '2007-01-22', 'Futboll ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO follows (follower_id, followee_id) VALUES (9, 7);
+INSERT INTO follows (follower_id, followee_id) VALUES (9, 2);
+INSERT INTO likes (user_id, tweet_id) VALUES (9, 21);
+INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (23, 9, 'Agreed!', '2026-06-21 18:04:09', 21);
+INSERT INTO likes (user_id, tweet_id) VALUES (9, 17);
+INSERT INTO tweets (tweet_id, user_id, content, image, created_at, parent_id) VALUES (24, 9, 'Mirando a la nada pensando en todo <3 ', NULL, '2026-06-21 19:23:42', NULL);
+UPDATE tweets SET image = 'img/tweets/24.jpg' WHERE tweet_id = 24;
+UPDATE tweets SET content = 'Mirando a la nada pensando en todo <3 ' WHERE tweet_id = 24;
+UPDATE tweets SET content = 'Mirando a la nada pensando en todo <3 
+
+Del admin:
+My guay la foto ! :) ' WHERE tweet_id = 24;
+INSERT INTO likes (user_id, tweet_id) VALUES (1, 24);

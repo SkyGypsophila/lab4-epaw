@@ -1,17 +1,20 @@
 package epaw.lab4.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 import epaw.lab4.model.Tweet;
 import epaw.lab4.model.User;
 import epaw.lab4.service.TweetService;
 import java.io.IOException;
 
 @WebServlet("/EditTweet")
+@MultipartConfig(maxFileSize = 5 * 1024 * 1024)
 public class EditTweet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +34,11 @@ public class EditTweet extends HttpServlet {
                         if (tweet != null) {
                             boolean isAdmin = user.getRole() != null && user.getRole().equalsIgnoreCase("ADMINISTRATOR");
                             if (isAdmin || tweet.getUid() == user.getId()) {
-                                tweetService.update(tweetId, content);
+                                Part filePart = null;
+                                try { filePart = request.getPart("tweetImage"); } catch (Exception ignored) {}
+                                boolean removeImage = "true".equals(request.getParameter("removeImage"));
+                                String imgDir = getServletContext().getRealPath("/img/tweets/");
+                                tweetService.update(tweetId, content, filePart, imgDir, removeImage);
                             } else {
                                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                                 return;
