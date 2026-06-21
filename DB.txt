@@ -182,3 +182,17 @@ UPDATE tweets SET content = 'Mirando a la nada pensando en todo <3 
 Del admin:
 My guay la foto ! :) ' WHERE tweet_id = 24;
 INSERT INTO likes (user_id, tweet_id) VALUES (1, 24);
+INSERT INTO tweets (tweet_id, user_id, content, image, created_at, parent_id) VALUES (25, 7, 'Spain are playing so well vs KSA !! ', NULL, '2026-06-21 19:30:10', NULL);
+UPDATE tweets SET content = 'Spain are playing so well vs KSA !! ' WHERE tweet_id = 25;
+UPDATE tweets SET image = 'img/tweets/25.jpg' WHERE tweet_id = 25;
+INSERT INTO tweets (tweet_id, user_id, content, image, created_at, parent_id) VALUES (26, 1, 'Welcome to Chirp, ENJOY ! ', NULL, '2026-06-21 20:33:50', NULL);
+UPDATE tweets SET image = 'img/tweets/26.jpg' WHERE tweet_id = 26;
+INSERT INTO likes (user_id, tweet_id) VALUES (1, 1);
+UPDATE users SET name = 'adminCool', nickname = 'admin', email = 'admin@xgames.com', favorite_game = 'All', updated_at = CURRENT_TIMESTAMP WHERE id = 1;
+INSERT INTO likes (user_id, tweet_id) VALUES (8, 26);
+INSERT INTO tweets (tweet_id, user_id, content, image, created_at, parent_id) VALUES (27, 8, 'THAT IS SO COOL!', NULL, '2026-06-21 20:43:44', 26);
+INSERT INTO follows (follower_id, followee_id) VALUES (8, 7);
+UPDATE users SET name = 'Fabian', nickname = 'Fabbe99', email = 'fabian.sitges@gmail.com', favorite_game = 'LOL', updated_at = CURRENT_TIMESTAMP WHERE id = 8;
+INSERT INTO likes (user_id, tweet_id) VALUES (8, 25);
+INSERT INTO tweets (tweet_id, user_id, content, image, created_at, parent_id) VALUES (28, 8, 'True 4:0 not to bad!', NULL, '2026-06-21 20:44:30', 25);
+INSERT INTO likes (user_id, tweet_id) VALUES (1, 26);

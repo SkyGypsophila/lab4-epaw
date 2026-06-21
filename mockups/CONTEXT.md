@@ -49,7 +49,13 @@ keep them. The iterators the JS looks for: `#feedIterator`, `#iterator`, `#globa
 
 ### Server = classic MVC behind each AJAX call
 `controller/` servlets → `service/` (business logic, singletons) → `repository/` (SQLite).
-Models: `User`, `Tweet`. Session holds the logged-in `User` (`sessionScope.user`).
+Session holds the logged-in `User` (`sessionScope.user`).
+
+**Models**:
+- `User`: `id, roleId, email, name, surname, nickname, password, picture, birthDate, favoriteGame, role (String), banned (boolean)`
+- `Tweet`: `id, uid, uname, upicture, parentId, postDateTime, content, image, likeCount, liked, banned, comments[]`
+  — `formattedTime()` returns `"dd MMM yyyy, HH:mm"`. `banned` = true when the author is in the `bans` table.
+- `UserRepository.findNotFollowed()` has an `includeAll` flag: when `true` (admin), banned users are NOT filtered out of the suggestions list.
 
 `Menu` servlet picks the fragment by role: `MenuNotLogged` / `MenuLogged` / `MenuAdmin`
 (role `ADMINISTRATOR`) / `MenuBanned`. `Content` returns `Login` (anon), `Timeline.jsp`
@@ -79,7 +85,10 @@ Optional single image per tweet. Storage: `src/main/webapp/img/tweets/{tweet_id}
 Served as static files alongside user avatars. Relative path stored in `tweets.image` column.
 
 **Accepted formats**: `.jpg` / `.jpeg` / `.svg` only (PNG rejected — too heavy).
-Server validates extension; non-matching uploads are silently ignored.
+Client-side: file inputs have `accept=".jpg,.jpeg,.svg"`; the `change` handler checks the extension
+and on failure clears the input, shows "Only .jpg or .svg files are allowed." in red
+(`.img-type-error` CSS class, `!important` needed to beat `.muted`), and shows no preview.
+Server-side: `TweetService.getExtension()` returns `null` for disallowed types and skips saving.
 
 **Schema**: `image VARCHAR(255)` — nullable, no DEFAULT. Old `INSERT INTO tweets` statements
 that omit the column get `NULL` automatically (SQLite behaviour). All 5 SELECT queries

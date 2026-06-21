@@ -105,16 +105,21 @@
 			/* Image file selected for new tweet */
 			$(document).on("change", "#tweetImageInput", function() {
 				var file = this.files[0];
-				if (file) {
-					$("#tweetImageName").text(file.name);
-					$("#clearTweetImage").show();
-					var reader = new FileReader();
-					reader.onload = function(e) {
-						$("#tweetImgPreviewImg").attr("src", e.target.result);
-						$("#tweetImgPreview").show();
-					};
-					reader.readAsDataURL(file);
+				if (!file) return;
+				var ext = file.name.split('.').pop().toLowerCase();
+				if (ext !== "jpg" && ext !== "jpeg" && ext !== "svg") {
+					$(this).val("");
+					$("#tweetImageName").text("Only .jpg or .svg files are allowed.").addClass("img-type-error");
+					return;
 				}
+				$("#tweetImageName").text(file.name).css("color", "");
+				$("#clearTweetImage").show();
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$("#tweetImgPreviewImg").attr("src", e.target.result);
+					$("#tweetImgPreview").show();
+				};
+				reader.readAsDataURL(file);
 			});
 
 			/* Clear selected image for new tweet */
@@ -274,8 +279,16 @@
 
 			/* Edit tweet image file selected */
 			$(document).on("change", ".editTweetImage", function() {
-				var name = this.files[0] ? this.files[0].name : "";
-				$(this).closest(".editTweetContainer").find(".editImgName").text(name);
+				var file = this.files[0];
+				if (!file) return;
+				var ext = file.name.split('.').pop().toLowerCase();
+				var $label = $(this).closest(".editTweetContainer").find(".editImgName");
+				if (ext !== "jpg" && ext !== "jpeg" && ext !== "svg") {
+					$(this).val("");
+					$label.text("Only .jpg or .svg files are allowed.").addClass("img-type-error");
+					return;
+				}
+				$label.text(file.name).css("color", "");
 			});
 
 			/* Save tweet edit via AJAX (multipart to support image replace/remove) */
