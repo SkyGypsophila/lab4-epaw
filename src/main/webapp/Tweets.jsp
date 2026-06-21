@@ -14,8 +14,15 @@
     <img src="${user.picture}" alt="Avatar" class="avatar md">
     <div class="body">
       <div class="head">
-        <a href="UserWall?id=${t.uid}" class="menu name">${t.uname}</a>
-        <span class="time"><i class="fa-regular fa-clock"></i> ${t.postDateTime}</span>
+        <c:choose>
+          <c:when test="${t.banned}">
+            <span class="name muted">${t.uname} <span class="status banned" style="font-size:0.75em">banned</span></span>
+          </c:when>
+          <c:otherwise>
+            <a href="UserWall?id=${t.uid}" class="menu name">${t.uname}</a>
+          </c:otherwise>
+        </c:choose>
+        <span class="time"><i class="fa-regular fa-clock"></i> ${t.formattedTime}</span>
       </div>
 
       <p class="tweetText content">${t.content}</p>
@@ -50,8 +57,15 @@
             <img src="${c.upicture}" alt="Avatar" class="avatar sm">
             <div class="body">
               <div class="head">
-                <a href="UserWall?id=${c.uid}" class="menu name">${c.uname}</a>
-                <span class="time">${c.postDateTime}</span>
+                <c:choose>
+                  <c:when test="${c.banned}">
+                    <span class="name muted">${c.uname} <span class="status banned" style="font-size:0.75em">banned</span></span>
+                  </c:when>
+                  <c:otherwise>
+                    <a href="UserWall?id=${c.uid}" class="menu name">${c.uname}</a>
+                  </c:otherwise>
+                </c:choose>
+                <span class="time">${c.formattedTime}</span>
               </div>
               <p class="content">${c.content}</p>
               <c:if test="${c.uid == user.id || user.role == 'ADMINISTRATOR'}">

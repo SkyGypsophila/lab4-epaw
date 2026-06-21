@@ -3,8 +3,10 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+	<c:if test="${not empty sessionScope.user}">
 	$('#rcolumn').load('NotFollowed');
 	$('#lcolumn').load('Profile');
+	</c:if>
 	$('#globalFeedIterator').load('GlobalFeedTweets');
 
 	$(document).off("click", "#showFriendFeedGlobal").on("click", "#showFriendFeedGlobal", function(){
@@ -31,7 +33,7 @@ $(document).ready(function(){
 			<h1 id="feedTitleGlobal"><i class="fa-solid fa-globe"></i> Global Feed</h1>
 			<p id="feedSubtitleGlobal">See what is happening across the whole network</p>
 		</div>
-		<c:if test="${not empty sessionScope.user}">
+		<c:if test="${not empty sessionScope.user && sessionScope.user.role != 'ADMINISTRATOR'}">
 		<div class="tabs">
 			<button id="showFriendFeedGlobal" type="button" class="w3-button w3-transparent">Friends</button>
 			<button id="showGlobalFeedGlobal" type="button" class="w3-button w3-theme">Global</button>

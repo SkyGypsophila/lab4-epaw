@@ -96,7 +96,8 @@ public class TweetRepository extends BaseRepository {
     public Optional<Tweet> findById(Integer tweetId) {
         String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
-                "0 AS liked_by_user " +
+                "0 AS liked_by_user, " +
+                "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
                 "FROM tweets t INNER JOIN users u ON t.user_id = u.id " +
                 "WHERE t.tweet_id = ?";
         try (PreparedStatement statement = db.prepareStatement(query)) {
@@ -122,7 +123,8 @@ public class TweetRepository extends BaseRepository {
         List<Tweet> tweets = new ArrayList<>();
         String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
-                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user " +
+                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user, " +
+                "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
                 "FROM tweets t INNER JOIN users u ON t.user_id = u.id " +
                 "WHERE t.user_id = ? AND t.parent_id IS NULL ORDER BY t.created_at DESC LIMIT ?, ?";
         try (PreparedStatement statement = db.prepareStatement(query)) {
@@ -149,7 +151,8 @@ public class TweetRepository extends BaseRepository {
         List<Tweet> tweets = new ArrayList<>();
         String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
-                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user " +
+                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user, " +
+                "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
                 "FROM tweets t " +
                 "INNER JOIN users u ON t.user_id = u.id " +
                 "INNER JOIN follows f ON t.user_id = f.followee_id " +
@@ -179,7 +182,8 @@ public class TweetRepository extends BaseRepository {
         List<Tweet> tweets = new ArrayList<>();
         String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
-                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user " +
+                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user, " +
+                "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
                 "FROM tweets t INNER JOIN users u ON t.user_id = u.id " +
                 "WHERE t.parent_id IS NULL ORDER BY t.created_at DESC LIMIT ?, ?";
         try (PreparedStatement statement = db.prepareStatement(query)) {
@@ -205,7 +209,8 @@ public class TweetRepository extends BaseRepository {
         List<Tweet> replies = new ArrayList<>();
         String query = "SELECT t.tweet_id, t.user_id, t.created_at, t.content, u.name, u.picture, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id) AS like_count, " +
-                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user " +
+                "(SELECT COUNT(*) FROM likes l WHERE l.tweet_id = t.tweet_id AND l.user_id = ?) AS liked_by_user, " +
+                "(SELECT COUNT(*) FROM bans WHERE banned_user_id = t.user_id) AS is_banned " +
                 "FROM tweets t INNER JOIN users u ON t.user_id = u.id " +
                 "WHERE t.parent_id = ? ORDER BY t.created_at ASC";
         try (PreparedStatement statement = db.prepareStatement(query)) {

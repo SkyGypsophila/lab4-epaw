@@ -283,7 +283,10 @@ public class UserRepository extends BaseRepository {
 
     // Find users followed by the current user
     public Optional<List<User>> findFollowed(Integer id, Integer start, Integer end) {
-        String query = "SELECT u.id, u.name, u.picture FROM users u INNER JOIN follows f ON u.id = f.followee_id WHERE f.follower_id = ? ORDER BY u.name LIMIT ?, ?";
+        String query = "SELECT u.id, u.name, u.picture, " +
+                "(SELECT COUNT(*) FROM bans WHERE banned_user_id = u.id) AS is_banned " +
+                "FROM users u INNER JOIN follows f ON u.id = f.followee_id " +
+                "WHERE f.follower_id = ? ORDER BY u.name LIMIT ?, ?";
         try (PreparedStatement statement = db.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.setInt(2, start);
@@ -295,6 +298,7 @@ public class UserRepository extends BaseRepository {
                     user.setId(rs.getInt("id"));
                     user.setName(rs.getString("name"));
                     user.setPicture(rs.getString("picture"));
+                    user.setBanned(rs.getInt("is_banned") > 0);
                     users.add(user);
                 }
                 return Optional.of(users);

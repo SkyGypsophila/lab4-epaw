@@ -1,6 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<script type="text/javascript">
+$(document).ready(function(){
+  $(document).off("input", "#searchAdminInput").on("input", "#searchAdminInput", function() {
+    var val = $(this).val().toLowerCase();
+    $(".user-row").each(function() {
+      var name = $(this).attr("data-name").toLowerCase();
+      var email = $(this).attr("data-email").toLowerCase();
+      $(this).toggle(val === "" || name.indexOf(val) !== -1 || email.indexOf(val) !== -1);
+    });
+  });
+});
+</script>
+
 <div class="w3-card card w3-section">
   <div class="page-header">
     <div class="titles">
@@ -10,6 +23,11 @@
   </div>
 </div>
 
+<div class="search w3-section">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="text" id="searchAdminInput" placeholder="Search by name or email">
+</div>
+
 <c:choose>
 <c:when test="${empty users}">
   <div class="w3-card card empty-state"><p>No users found.</p></div>
@@ -17,7 +35,7 @@
 <c:otherwise>
 <div class="w3-card card who-card">
 <c:forEach var="u" items="${users}">
-  <div id="${u.id}" class="user-row">
+  <div id="${u.id}" class="user-row" data-name="${u.name}" data-email="${u.email}">
     <img src="${u.picture}" alt="Avatar" class="uavatar">
     <div class="uinfo">
       <b>${u.name}

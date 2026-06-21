@@ -23,7 +23,14 @@
 	<div id="${u.id}" class="who-row">
 		<img src="${u.picture}" alt="Avatar" class="avatar sm">
 		<div class="meta">
-			<b><a href="UserWall?id=${u.id}" class="menu">${u.name}</a></b>
+			<c:choose>
+				<c:when test="${u.banned}">
+					<b><span class="muted">${u.name} <span class="status banned" style="font-size:0.75em">banned</span></span></b>
+				</c:when>
+				<c:otherwise>
+					<b><a href="UserWall?id=${u.id}" class="menu">${u.name}</a></b>
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<button type="button" class="unfollowUser btn sm ghost"><i class="fa-solid fa-user-minus"></i> Unfollow</button>
 	</div>
