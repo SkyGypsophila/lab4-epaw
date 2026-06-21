@@ -157,7 +157,7 @@ public class UserService {
         return null;
     }
 
-    public String saveProfilePicture(Part filePart, String username) {
+    public String saveProfilePicture(Part filePart, String username, String imgDir) {
         if (filePart == null || filePart.getSize() <= 0) {
             return null;
         }
@@ -167,13 +167,12 @@ public class UserService {
             String extension = fileName.substring(fileName.lastIndexOf("."));
             String newFileName = username + extension;
 
-            String resourcesDir = "EXTERNAL_RESOURCES";
-            Files.createDirectories(Paths.get(resourcesDir));
+            Files.createDirectories(Paths.get(imgDir));
 
             try (InputStream input = filePart.getInputStream()) {
-                Files.copy(input, Paths.get(resourcesDir, newFileName), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(input, Paths.get(imgDir, newFileName), StandardCopyOption.REPLACE_EXISTING);
             }
-            return newFileName;
+            return "img/" + newFileName;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

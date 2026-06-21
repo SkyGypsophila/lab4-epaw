@@ -3,75 +3,79 @@
 
 <c:choose>
 <c:when test="${empty tweets}">
-  <div class="w3-container w3-card w3-round w3-white w3-section w3-padding w3-center">
-    <p class="w3-opacity"><i class="fa fa-info-circle"></i> No posts yet. Follow some users to see their tweets here!</p>
+  <div class="w3-card card empty-state">
+    <i class="fa-regular fa-comments"></i>
+    <p>No posts yet. Follow some users to see their tweets here!</p>
   </div>
 </c:when>
 <c:otherwise>
 <c:forEach var="t" items="${tweets}">
-  <div id="${t.id}" class="w3-container w3-card w3-section w3-white w3-round w3-animate-opacity"><br>
-    <img src="${t.upicture}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-    <span class="w3-right w3-opacity"> ${t.postDateTime} </span>
-    <h4><a href="UserWall?id=${t.uid}" class="menu w3-hover-text-theme" style="text-decoration:none;">${t.uname}</a></h4><br>
-    <hr class="w3-clear">
-    <p class="tweetText"> ${t.content} </p>
-    
-    <div class="editTweetContainer" style="display:none; margin-bottom: 10px;">
-        <textarea class="editTweetText w3-input w3-border w3-round">${t.content}</textarea>
-        <button type="button" class="saveTweetEdit w3-button w3-green w3-round w3-tiny w3-margin-top"><i class="fa fa-check"></i> Save</button>
-        <button type="button" class="cancelTweetEdit w3-button w3-red w3-round w3-tiny w3-margin-top"><i class="fa fa-close"></i> Cancel</button>
-    </div>
+  <div id="${t.id}" class="w3-card tweet card w3-animate-opacity">
+    <img src="${t.upicture}" alt="Avatar" class="avatar md">
+    <div class="body">
+      <div class="head">
+        <a href="UserWall?id=${t.uid}" class="menu name">${t.uname}</a>
+        <span class="time"><i class="fa-regular fa-clock"></i> ${t.postDateTime}</span>
+      </div>
 
-    <c:choose>
-      <c:when test="${empty sessionScope.user}">
-        <span class="w3-button w3-light-grey w3-margin-bottom w3-round w3-disabled"><i class="fa fa-thumbs-up"></i> &nbsp;Like (${t.likeCount})</span>
-      </c:when>
-      <c:otherwise>
+      <p class="tweetText content">${t.content}</p>
+
+      <div class="editTweetContainer" style="display:none; margin-bottom: 10px;">
+        <textarea class="editTweetText w3-input w3-border w3-round">${t.content}</textarea>
+        <div class="actions" style="margin-top:8px;">
+          <button type="button" class="saveTweetEdit act"><i class="fa-solid fa-check"></i> Save</button>
+          <button type="button" class="cancelTweetEdit act"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        </div>
+      </div>
+
+      <div class="actions">
         <c:choose>
-          <c:when test="${t.liked}">
-            <button type="button" class="likeTweet w3-button w3-deep-orange w3-margin-bottom w3-round"><i class="fa fa-thumbs-down"></i> &nbsp;Unlike (${t.likeCount})</button>
+          <c:when test="${empty sessionScope.user}">
+            <span class="act"><i class="fa-regular fa-heart"></i> ${t.likeCount}</span>
           </c:when>
           <c:otherwise>
-            <button type="button" class="likeTweet w3-button w3-theme w3-margin-bottom w3-round"><i class="fa fa-thumbs-up"></i> &nbsp;Like (${t.likeCount})</button>
+            <button type="button" class="likeTweet act ${t.liked ? 'liked' : ''}">
+              <i class="${t.liked ? 'fa-solid' : 'fa-regular'} fa-heart"></i> ${t.likeCount}
+            </button>
           </c:otherwise>
         </c:choose>
-      </c:otherwise>
-    </c:choose>
+        <c:if test="${t.uid == sessionScope.user.id || sessionScope.user.role == 'ADMINISTRATOR'}">
+          <button type="button" class="editTweetBtn act edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+          <button type="button" class="delTweet act danger"><i class="fa-solid fa-trash"></i> Delete</button>
+        </c:if>
+      </div>
 
-    <c:if test="${t.uid == sessionScope.user.id || sessionScope.user.role == 'ADMINISTRATOR'}">
-      <button type="button" class="editTweetBtn w3-button w3-blue w3-margin-bottom w3-round"><i class="fa fa-edit"></i> &nbsp;Edit</button>
-      <button type="button" class="delTweet w3-button w3-red w3-margin-bottom w3-round"><i class="fa fa-trash"></i> &nbsp;Delete</button>
-    </c:if>
-
-    <c:if test="${not empty t.comments}">
-        <div class="w3-margin-top w3-margin-bottom">
+      <c:if test="${not empty t.comments}">
+        <div class="replies">
         <c:forEach var="c" items="${t.comments}">
-            <div id="${c.id}" class="w3-panel w3-light-grey w3-leftbar w3-border-theme w3-padding" style="margin-left: 20px;">
-                <img src="${c.upicture}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:30px">
-                <span class="w3-right w3-opacity w3-small"> ${c.postDateTime} </span>
-                <h6 style="margin:0; font-weight: bold;"><a href="UserWall?id=${c.uid}" class="menu w3-hover-text-theme" style="text-decoration:none;">${c.uname}</a></h6>
-                <p style="margin-top:5px; margin-bottom:5px; font-size: 0.9em;"> ${c.content} </p>
-                <c:if test="${c.uid == sessionScope.user.id || sessionScope.user.role == 'ADMINISTRATOR'}">
-                  <button type="button" class="delTweet w3-button w3-red w3-round w3-tiny"><i class="fa fa-trash"></i></button>
-                </c:if>
+          <div id="${c.id}" class="reply">
+            <img src="${c.upicture}" alt="Avatar" class="avatar sm">
+            <div class="body">
+              <div class="head">
+                <a href="UserWall?id=${c.uid}" class="menu name">${c.uname}</a>
+                <span class="time">${c.postDateTime}</span>
+              </div>
+              <p class="content">${c.content}</p>
+              <c:if test="${c.uid == sessionScope.user.id || sessionScope.user.role == 'ADMINISTRATOR'}">
+                <div class="actions">
+                  <button type="button" class="delTweet act danger"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </c:if>
             </div>
+          </div>
         </c:forEach>
         </div>
-    </c:if>
+      </c:if>
 
-    <c:if test="${not empty sessionScope.user}">
-        <hr class="w3-clear" style="margin: 10px 0;">
-        <div class="w3-row w3-margin-bottom w3-padding-small">
-            <div class="w3-col m10 s9">
-                <input type="text" class="commentText w3-input w3-border w3-round w3-light-grey" placeholder="Escribe un comentario o respuesta...">
-            </div>
-            <div class="w3-col m2 s3" style="padding-left:10px;">
-                <button type="button" class="commentTweetBtn w3-button w3-theme w3-round" style="width:100%"><i class="fa fa-reply"></i></button>
-            </div>
+      <c:if test="${not empty sessionScope.user}">
+        <div class="reply-box">
+          <input type="text" class="commentText" placeholder="Write a reply…">
+          <button type="button" class="commentTweetBtn btn sm"><i class="fa-solid fa-reply"></i></button>
         </div>
-    </c:if>
+      </c:if>
+    </div>
   </div>
 </c:forEach>
-
 </c:otherwise>
 </c:choose>
+</content>

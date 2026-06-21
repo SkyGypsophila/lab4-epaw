@@ -3,11 +3,13 @@ package epaw.lab4.repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import epaw.lab4.model.User;
+import epaw.lab4.util.DBLogger;
 
 public class UserRepository extends BaseRepository {
 
@@ -126,7 +128,7 @@ public class UserRepository extends BaseRepository {
 
     public void save(User user) {
         String query = "INSERT INTO users (role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
-        try (PreparedStatement statement = db.prepareStatement(query)) {
+        try (PreparedStatement statement = db.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, user.getRoleId());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getName());
@@ -137,6 +139,20 @@ public class UserRepository extends BaseRepository {
             statement.setString(8, user.getBirthDate());
             statement.setString(9, user.getFavoriteGame());
             statement.executeUpdate();
+            try (ResultSet keys = statement.getGeneratedKeys()) {
+                if (keys.next()) {
+                    int id = keys.getInt(1);
+                    user.setId(id);
+                    DBLogger.append(
+                        "INSERT INTO users (id, role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game, created_at, updated_at) VALUES (" +
+                        id + ", " + user.getRoleId() + ", " + DBLogger.q(user.getEmail()) + ", " +
+                        DBLogger.q(user.getName()) + ", " + DBLogger.q(user.getSurname()) + ", " +
+                        DBLogger.q(user.getNickname()) + ", " + DBLogger.q(user.getPassword()) + ", " +
+                        DBLogger.q(user.getPicture()) + ", " + DBLogger.q(user.getBirthDate()) + ", " +
+                        DBLogger.q(user.getFavoriteGame()) + ", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
+                    );
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -151,6 +167,13 @@ public class UserRepository extends BaseRepository {
             statement.setString(4, user.getFavoriteGame());
             statement.setInt(5, user.getId());
             statement.executeUpdate();
+            DBLogger.append(
+                "UPDATE users SET name = " + DBLogger.q(user.getName()) +
+                ", nickname = " + DBLogger.q(user.getNickname()) +
+                ", email = " + DBLogger.q(user.getEmail()) +
+                ", favorite_game = " + DBLogger.q(user.getFavoriteGame()) +
+                ", updated_at = CURRENT_TIMESTAMP WHERE id = " + user.getId()
+            );
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -214,6 +237,7 @@ public class UserRepository extends BaseRepository {
             statement.setInt(1, followerId);
             statement.setInt(2, followeeId);
             statement.executeUpdate();
+            DBLogger.append("INSERT INTO follows (follower_id, followee_id) VALUES (" + followerId + ", " + followeeId + ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -226,6 +250,7 @@ public class UserRepository extends BaseRepository {
             statement.setInt(1, followerId);
             statement.setInt(2, followeeId);
             statement.executeUpdate();
+            DBLogger.append("DELETE FROM follows WHERE follower_id = " + followerId + " AND followee_id = " + followeeId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -339,6 +364,8 @@ public class UserRepository extends BaseRepository {
             statement.setInt(2, adminId);
             statement.setString(3, reason);
             statement.executeUpdate();
+            DBLogger.append("INSERT INTO bans (banned_user_id, banned_by_admin_id, reason) VALUES (" +
+                bannedUserId + ", " + adminId + ", " + DBLogger.q(reason) + ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -350,6 +377,7 @@ public class UserRepository extends BaseRepository {
         try (PreparedStatement statement = db.prepareStatement(query)) {
             statement.setInt(1, bannedUserId);
             statement.executeUpdate();
+            DBLogger.append("DELETE FROM bans WHERE banned_user_id = " + bannedUserId);
         } catch (SQLException e) {
             e.printStackTrace();
         }

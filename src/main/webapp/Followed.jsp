@@ -1,19 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<div class="w3-card card w3-section">
+	<div class="page-header">
+		<div class="titles">
+			<h1>Following</h1>
+			<p>People you follow</p>
+		</div>
+	</div>
+</div>
+
 <c:choose>
 <c:when test="${empty users}">
-<p> </p>
+	<div class="w3-card card empty-state">
+		<i class="fa-solid fa-user-group"></i>
+		<p>You are not following anyone yet.</p>
+	</div>
 </c:when>
 <c:otherwise>
-<c:forEach var="u" items="${users}">      
- <div id="${u.id}" class="w3-container w3-card w3-section w3-white w3-round w3-animate-opacity"><br>
-   <img src="${u.picture}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-   <h4><a href="UserWall?id=${u.id}" class="menu w3-hover-text-theme" style="text-decoration:none;">${u.name}</a></h4><br>
-   <hr class="w3-clear">
-   <button type="button" class="userInfo w3-button w3-theme w3-margin-bottom"><i class="fa fa-info-circle"></i> &nbsp;Info</button>
-   <button type="button" class="unfollowUser w3-button w3-red w3-margin-bottom"><i class="fa fa-trash"></i> &nbsp;Unfollow</button> 
- </div>
+<div class="w3-card card who-card">
+<c:forEach var="u" items="${users}">
+	<div id="${u.id}" class="who-row">
+		<img src="${u.picture}" alt="Avatar" class="avatar sm">
+		<div class="meta">
+			<b><a href="UserWall?id=${u.id}" class="menu">${u.name}</a></b>
+		</div>
+		<button type="button" class="unfollowUser btn sm ghost"><i class="fa-solid fa-user-minus"></i> Unfollow</button>
+	</div>
 </c:forEach>
+</div>
 </c:otherwise>
 </c:choose>
+</content>

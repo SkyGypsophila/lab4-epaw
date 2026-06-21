@@ -7,7 +7,12 @@ $(document).ready(function(){
 });
 </script>
 
-<div class="w3-container w3-padding-24 w3-white">
-	<p class="w3-large">Login successful!</p>
-	<p>Hello <strong>${user.name}</strong>, you can now enjoy all the features.</p>
+<div class="w3-card card w3-section">
+	<div class="page-header">
+		<div class="titles">
+			<h1><i class="fa-solid fa-circle-check" style="color:var(--success)"></i> Login successful</h1>
+			<p>Hello <strong>${user.name}</strong>, you can now enjoy all the features.</p>
+		</div>
+	</div>
 </div>
+</content>

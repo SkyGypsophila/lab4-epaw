@@ -9,7 +9,11 @@ $(document).ready(function(){
 });
 </script>
 
-<div class="w3-container w3-padding-24 w3-white">
-	<p class="w3-large">You have successfully logged out.</p>
-	<p>Thank you for your visit. See you soon!</p>
+<div class="w3-card card w3-section">
+	<div class="page-header">
+		<div class="titles">
+			<h1><i class="fa-solid fa-right-from-bracket"></i> Logged out</h1>
+			<p>Thank you for your visit. See you soon!</p>
+		</div>
+	</div>
 </div>

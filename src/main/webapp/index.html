@@ -3,12 +3,15 @@
 
 <head>
 	<meta charset="UTF-8">
+	<meta name="theme-color" content="#0E1217">
 	<link rel="icon" href="assets/upf.png">
-	<title> U </title>
+	<title> Chirp </title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
-	<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	<link rel="stylesheet" href="css/style.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script>
@@ -62,9 +65,8 @@
 			});
 			/* Follow user */
 			$(document).on("click", ".followUser", function(event) {
-				var user = $(this).parent();
 				$.post("Follow", {
-					id : $(this).parent().attr("id")
+					id : $(this).closest("[id]").attr("id")
 				}, function(event) {
 					$("#content").load("Followed");
 					$("#rcolumn").load("NotFollowed");
@@ -73,9 +75,8 @@
 			});
 			/* UnFollow user */
 			$(document).on("click", ".unfollowUser", function(event) {
-				var user = $(this).parent();
 				$.post("Unfollow", {
-					id : $(this).parent().attr("id")
+					id : $(this).closest("[id]").attr("id")
 				}, function(event) {
 					$("#content").load("Followed");
 					$("#rcolumn").load("NotFollowed");
@@ -93,7 +94,7 @@
 			});
 			/* Delete tweet */
 			$(document).on("click", ".delTweet", function(event) {
-				var tweetId = $(this).parent().attr("id");
+				var tweetId = $(this).closest("[id]").attr("id");
 				$.post("DelTweet", {
 					id : tweetId
 				}, function() {
@@ -114,7 +115,7 @@
 			});
 			/* Ban user (admin) */
 			$(document).on("click", ".banUser", function(event) {
-				var userDiv = $(this).parent();
+				var userDiv = $(this).closest("[id]");
 				var reason = userDiv.find(".banReason").val();
 				$.post("BanUser", {
 					id : userDiv.attr("id"),
@@ -126,7 +127,7 @@
 			});
 			/* Unban user (admin) */
 			$(document).on("click", ".unbanUser", function(event) {
-				var userDiv = $(this).parent();
+				var userDiv = $(this).closest("[id]");
 				$.post("UnbanUser", {
 					id : userDiv.attr("id")
 				}, function() {
@@ -136,7 +137,7 @@
 			});
 			/* Like / Unlike tweet (toggle) */
 			$(document).on("click", ".likeTweet", function(event) {
-				var tweetDiv = $(this).parent();
+				var tweetDiv = $(this).closest("[id]");
 				$.post("LikeTweet", {
 					id : tweetDiv.attr("id")
 				}, function() {

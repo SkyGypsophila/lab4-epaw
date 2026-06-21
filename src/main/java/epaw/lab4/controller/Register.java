@@ -50,7 +50,8 @@ public class Register extends HttpServlet {
 				user.setRole("REGISTERED");
 			}
 
-			String picturePath = userService.saveProfilePicture(request.getPart("picture"), user.getName());
+			String imgDir = getServletContext().getRealPath("/img/");
+			String picturePath = userService.saveProfilePicture(request.getPart("picture"), user.getName(), imgDir);
 			user.setPicture(picturePath);
 		} catch (Exception e) {
 			e.printStackTrace();

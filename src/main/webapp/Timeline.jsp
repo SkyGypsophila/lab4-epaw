@@ -9,16 +9,26 @@ $(document).ready(function(){
 });
 </script>
 
-<div class="w3-container w3-card w3-round w3-white w3-section">
-	<h6 class="w3-opacity"> ${user.name}, what are you thinking? </h6>
-	<p id="tweetContent" contenteditable="true" class="w3-border w3-padding"> </p>
-	<button id="addTweet" type="button" class="w3-button w3-theme w3-section"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
+<div class="w3-card card w3-section">
+	<div class="page-header">
+		<div class="titles">
+			<h1>My posts</h1>
+			<p>${user.name}, what are you thinking?</p>
+		</div>
+	</div>
 </div>
- 
+
+<div class="w3-card card compose w3-section">
+	<img src="${user.picture}" alt="Avatar" class="avatar md">
+	<div class="field">
+		<p id="tweetContent" contenteditable="true" data-placeholder="What's happening?"></p>
+		<div class="compose-bar">
+			<button id="addTweet" type="button" class="btn"><i class="fa-solid fa-feather"></i> &nbsp;Post</button>
+		</div>
+	</div>
+</div>
+
 <div id="iterator">
 <!-- Tweets will be loaded here -->
 </div>
-
-
-
-
+</content>

@@ -10,40 +10,47 @@ $(document).ready(function(){
 });
 </script>
 
-<div class="w3-container w3-card w3-round w3-white w3-section w3-center">
+<div class="w3-card card w3-section">
   <c:choose>
     <c:when test="${not empty targetUser}">
       <input type="hidden" id="userWallId" value="${targetUser.id}" />
-      <h4>Public Profile: ${targetUser.name}</h4>
-      <c:if test="${not empty targetUser.picture}">
-        <p><img src="${targetUser.picture}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
-      </c:if>
-      <hr>
-      <p class="w3-left-align"><i class="fa fa-id-card fa-fw w3-margin-right"></i> ${targetUser.name} ${targetUser.surname}</p>
-      <c:if test="${not empty targetUser.nickname}">
-        <p class="w3-left-align"><i class="fa fa-at fa-fw w3-margin-right"></i> ${targetUser.nickname}</p>
-      </c:if>
-      <c:if test="${not empty targetUser.email}">
-        <p class="w3-left-align"><i class="fa fa-envelope fa-fw w3-margin-right"></i> ${targetUser.email}</p>
-      </c:if>
-      <c:if test="${not empty targetUser.favoriteGame}">
-        <p class="w3-left-align"><i class="fa fa-gamepad fa-fw w3-margin-right"></i> ${targetUser.favoriteGame}</p>
-      </c:if>
-      <c:if test="${not empty targetUser.birthDate}">
-        <p class="w3-left-align"><i class="fa fa-birthday-cake fa-fw w3-margin-right"></i> ${targetUser.birthDate}</p>
-      </c:if>
+      <div class="profile-card">
+        <c:if test="${not empty targetUser.picture}">
+          <img src="${targetUser.picture}" class="pavatar" alt="Avatar">
+        </c:if>
+        <h4>${targetUser.name} ${targetUser.surname}</h4>
+        <c:if test="${not empty targetUser.nickname}">
+          <div class="handle">@${targetUser.nickname}</div>
+        </c:if>
+        <div class="profile-meta">
+          <c:if test="${not empty targetUser.email}">
+            <p><i class="fa-solid fa-envelope"></i> ${targetUser.email}</p>
+          </c:if>
+          <c:if test="${not empty targetUser.favoriteGame}">
+            <p><i class="fa-solid fa-gamepad"></i> ${targetUser.favoriteGame}</p>
+          </c:if>
+          <c:if test="${not empty targetUser.birthDate}">
+            <p><i class="fa-solid fa-cake-candles"></i> ${targetUser.birthDate}</p>
+          </c:if>
+        </div>
+      </div>
     </c:when>
     <c:otherwise>
-      <p class="w3-opacity">User not found.</p>
+      <p class="muted">User not found.</p>
     </c:otherwise>
   </c:choose>
 </div>
 
-<div class="w3-container w3-card w3-round w3-white w3-section">
-	<h4><i class="fa fa-pencil-square-o"></i> Posts</h4>
-	<p class="w3-opacity">Historial de publicaciones</p>
+<div class="w3-card card w3-section">
+	<div class="page-header">
+		<div class="titles">
+			<h1><i class="fa-solid fa-pen-nib"></i> Posts</h1>
+			<p>Post history</p>
+		</div>
+	</div>
 </div>
 
 <div id="userWallIterator">
 <!-- Target user tweets will be loaded here -->
 </div>
+</content>

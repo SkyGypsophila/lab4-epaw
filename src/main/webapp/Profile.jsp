@@ -3,62 +3,66 @@
 
 <c:choose>
 <c:when test="${user != null}">
-<div id="${user.id}" class="w3-container w3-card w3-round w3-white w3-section w3-center">
-  <div id="profileViewDiv" style="padding-bottom: 10px;">
-    <h4>My Profile</h4>
-    <p><img src="${user.picture}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
-    <hr>
-    <p class="w3-left-align"><i class="fa fa-id-card fa-fw w3-margin-right"></i> ${user.name}</p>
+<div id="${user.id}" class="w3-card card w3-section">
+  <div id="profileViewDiv" class="profile-card">
+    <img src="${user.picture}" class="pavatar" alt="Avatar">
+    <h4>${user.name}</h4>
     <c:if test="${not empty user.nickname}">
-      <p class="w3-left-align"><i class="fa fa-at fa-fw w3-margin-right"></i> ${user.nickname}</p>
+      <div class="handle">@${user.nickname}</div>
     </c:if>
-    <c:if test="${not empty user.email}">
-      <p class="w3-left-align"><i class="fa fa-envelope fa-fw w3-margin-right"></i> ${user.email}</p>
-    </c:if>
-    <c:if test="${not empty user.favoriteGame}">
-      <p class="w3-left-align"><i class="fa fa-gamepad fa-fw w3-margin-right"></i> ${user.favoriteGame}</p>
-    </c:if>
-    <c:if test="${not empty user.birthDate}">
-      <p class="w3-left-align"><i class="fa fa-birthday-cake fa-fw w3-margin-right"></i> ${user.birthDate}</p>
-    </c:if>
-    <c:if test="${not empty user.role}">
-      <p class="w3-left-align"><i class="fa fa-shield fa-fw w3-margin-right"></i> ${user.role}</p>
-    </c:if>
-    <button type="button" id="editProfileBtn" class="w3-button w3-theme w3-round w3-small w3-margin-bottom" style="width:100%;"><i class="fa-solid fa-pencil"></i> Edit Profile</button>
-    <a href="Followed" class="menu w3-button w3-block w3-theme-l4 w3-round w3-small w3-left-align" style="width:100%; text-decoration:none; margin-top:5px;"><i class="fa-solid fa-users w3-margin-right"></i> Following / Buddies</a>
+
+    <div class="profile-meta">
+      <c:if test="${not empty user.email}">
+        <p><i class="fa-solid fa-envelope"></i> ${user.email}</p>
+      </c:if>
+      <c:if test="${not empty user.favoriteGame}">
+        <p><i class="fa-solid fa-gamepad"></i> ${user.favoriteGame}</p>
+      </c:if>
+      <c:if test="${not empty user.birthDate}">
+        <p><i class="fa-solid fa-cake-candles"></i> ${user.birthDate}</p>
+      </c:if>
+      <c:if test="${not empty user.role}">
+        <p><i class="fa-solid fa-shield-halved"></i> ${user.role}</p>
+      </c:if>
+    </div>
+
+    <button type="button" id="editProfileBtn" class="btn full" style="margin-top:16px;"><i class="fa-solid fa-pen-to-square"></i> &nbsp;Edit profile</button>
+    <a href="Followed" class="menu btn ghost full" style="margin-top:8px;"><i class="fa-solid fa-user-group"></i> &nbsp;Following / Buddies</a>
   </div>
 
-  <div id="profileEditDiv" style="display:none; text-align: left; padding: 10px 0;">
-    <h4>Edit Profile</h4>
+  <div id="profileEditDiv" style="display:none;">
+    <h4>Edit profile</h4>
     <form id="editProfileForm">
-      <div class="w3-section">
-        <label class="w3-small"><b>Username</b></label>
-        <input class="w3-input w3-border w3-round" type="text" id="editName" value="${user.name}" required>
+      <div class="field-group" style="margin-top:12px;">
+        <label>Username</label>
+        <input type="text" id="editName" value="${user.name}" required>
         <span class="profile-error w3-text-red w3-small" id="error-name"></span>
       </div>
-      <div class="w3-section">
-        <label class="w3-small"><b>Nickname</b></label>
-        <input class="w3-input w3-border w3-round" type="text" id="editNickname" value="${user.nickname}" required>
+      <div class="field-group" style="margin-top:12px;">
+        <label>Nickname</label>
+        <input type="text" id="editNickname" value="${user.nickname}" required>
         <span class="profile-error w3-text-red w3-small" id="error-nickname"></span>
       </div>
-      <div class="w3-section">
-        <label class="w3-small"><b>Email</b></label>
-        <input class="w3-input w3-border w3-round" type="email" id="editEmail" value="${user.email}" required>
+      <div class="field-group" style="margin-top:12px;">
+        <label>Email</label>
+        <input type="email" id="editEmail" value="${user.email}" required>
         <span class="profile-error w3-text-red w3-small" id="error-email"></span>
       </div>
-      <div class="w3-section">
-        <label class="w3-small"><b>Favorite Game</b></label>
-        <input class="w3-input w3-border w3-round" type="text" id="editFavoriteGame" value="${user.favoriteGame}">
+      <div class="field-group" style="margin-top:12px;">
+        <label>Favorite game</label>
+        <input type="text" id="editFavoriteGame" value="${user.favoriteGame}">
         <span class="profile-error w3-text-red w3-small" id="error-favoriteGame"></span>
       </div>
-      <button type="submit" class="w3-button w3-theme w3-round w3-small">Save</button>
-      <button type="button" id="cancelEditProfile" class="w3-button w3-red w3-round w3-small">Cancel</button>
+      <div style="display:flex; gap:8px; margin-top:16px;">
+        <button type="submit" class="btn sm"><i class="fa-solid fa-check"></i> Save</button>
+        <button type="button" id="cancelEditProfile" class="btn sm ghost">Cancel</button>
+      </div>
     </form>
   </div>
 </div>
-<br>
 </c:when>
 <c:otherwise>
-<p/>
+<p></p>
 </c:otherwise>
 </c:choose>
+</content>

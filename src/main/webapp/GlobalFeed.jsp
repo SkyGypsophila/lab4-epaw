@@ -6,34 +6,39 @@ $(document).ready(function(){
 	$('#rcolumn').load('NotFollowed');
 	$('#lcolumn').load('Profile');
 	$('#globalFeedIterator').load('GlobalFeedTweets');
-	
+
 	$(document).off("click", "#showFriendFeedGlobal").on("click", "#showFriendFeedGlobal", function(){
 		$(this).addClass("w3-theme").removeClass("w3-transparent");
 		$("#showGlobalFeedGlobal").removeClass("w3-theme").addClass("w3-transparent");
-		$("#feedTitleGlobal").html('<i class="fa-solid fa-globe"></i> Friend Feed');
+		$("#feedTitleGlobal").html('<i class="fa-solid fa-house"></i> Friend Feed');
 		$("#feedSubtitleGlobal").text('Latest posts from people you follow');
 		$('#globalFeedIterator').load('FeedTweets');
 	});
-	
+
 	$(document).off("click", "#showGlobalFeedGlobal").on("click", "#showGlobalFeedGlobal", function(){
 		$(this).addClass("w3-theme").removeClass("w3-transparent");
 		$("#showFriendFeedGlobal").removeClass("w3-theme").addClass("w3-transparent");
-		$("#feedTitleGlobal").html('<i class="fa-solid fa-users"></i> Global Feed');
-		$("#feedSubtitleGlobal").text('Descubre lo que está pasando en toda la red');
+		$("#feedTitleGlobal").html('<i class="fa-solid fa-globe"></i> Global Feed');
+		$("#feedSubtitleGlobal").text('See what is happening across the whole network');
 		$('#globalFeedIterator').load('GlobalFeedTweets');
 	});
 });
 </script>
 
-<c:if test="${not empty sessionScope.user}">
-<div class="w3-bar w3-card w3-round w3-margin-bottom" style="background-color: rgba(30, 41, 59, 0.9); padding: 5px;">
-  <button id="showFriendFeedGlobal" class="w3-bar-item w3-button w3-transparent w3-round w3-margin-right w3-mobile">Friend Feed</button>
-  <button id="showGlobalFeedGlobal" class="w3-bar-item w3-button w3-theme w3-round w3-mobile">Global Feed</button>
+<div class="w3-card card w3-section">
+	<div class="page-header">
+		<div class="titles">
+			<h1 id="feedTitleGlobal"><i class="fa-solid fa-globe"></i> Global Feed</h1>
+			<p id="feedSubtitleGlobal">See what is happening across the whole network</p>
+		</div>
+		<c:if test="${not empty sessionScope.user}">
+		<div class="tabs">
+			<button id="showFriendFeedGlobal" type="button" class="w3-button w3-transparent">Friends</button>
+			<button id="showGlobalFeedGlobal" type="button" class="w3-button w3-theme">Global</button>
+		</div>
+		</c:if>
+	</div>
 </div>
-</c:if>
 
-<div class="w3-container w3-card w3-round w3-white w3-section">
-	<h4 id="feedTitleGlobal"><i class="fa-solid fa-users"></i> Global Feed</h4>
-	<p id="feedSubtitleGlobal" class="w3-opacity">Descubre lo que está pasando en toda la red</p>
-</div>
-<div id="globalFeedIterator"></div>
+<div id="globalFeedIterator"></div>
+</content>

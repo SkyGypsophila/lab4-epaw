@@ -17,25 +17,34 @@ $(document).ready(function(){
 });
 </script>
 
-<div class="w3-container w3-card w3-round w3-white w3-section w3-padding">
-    <h6 class="w3-opacity">Find Users</h6>
-    <input type="text" id="searchUsersInput" class="w3-input w3-border w3-round" placeholder="Search by name...">
+<div class="search w3-section">
+	<i class="fa-solid fa-magnifying-glass"></i>
+	<input type="text" id="searchUsersInput" placeholder="Search users">
 </div>
 
-<div id="suggestionsContainer">
-<c:choose>
-<c:when test="${empty users}">
-<p class="w3-opacity w3-center">No suggestions</p>
-</c:when>
-<c:otherwise>
-<c:forEach var="u" items="${users}">       
-<div id="${u.id}" class="suggestion-card w3-container w3-card w3-round w3-white w3-center w3-section" data-name="${u.name}">
-	<p>Friend Suggestion</p>
-    <img src="${u.picture}" alt="Avatar" style="width:50%"><br>
-    <div><a href="UserWall?id=${u.id}" class="menu w3-hover-text-theme" style="text-decoration:none;">${u.name}</a></div>
-   	<button type="button" class="followUser w3-row w3-button w3-green w3-section"><i class="fa-solid fa-user-plus"></i> &nbsp;Follow</button> 
+<div class="w3-card card who-card">
+	<div class="who-title">
+		<h3 class="card-title">Who to follow</h3>
+		<p class="card-sub">Discover people you might like</p>
+	</div>
+	<div id="suggestionsContainer">
+	<c:choose>
+	<c:when test="${empty users}">
+		<div class="who-row"><span class="muted">No suggestions</span></div>
+	</c:when>
+	<c:otherwise>
+	<c:forEach var="u" items="${users}">
+		<div id="${u.id}" class="suggestion-card who-row" data-name="${u.name}">
+			<img src="${u.picture}" alt="Avatar" class="avatar sm">
+			<div class="meta">
+				<b><a href="UserWall?id=${u.id}" class="menu">${u.name}</a></b>
+				<span>Friend suggestion</span>
+			</div>
+			<button type="button" class="followUser btn sm"><i class="fa-solid fa-user-plus"></i> Follow</button>
+		</div>
+	</c:forEach>
+	</c:otherwise>
+	</c:choose>
+	</div>
 </div>
-</c:forEach>
-</c:otherwise>
-</c:choose>
-</div>
+</content>

@@ -31,7 +31,19 @@ CREATE TABLE users (
 );
 
 INSERT INTO users (role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game)
-VALUES (2, 'admin@xgames.com', 'admin', 'Admin', 'admin', 'Admin123!', NULL, '2000-01-01', 'All');
+VALUES (2, 'admin@xgames.com', 'admin', 'Admin', 'admin', 'Admin123!', 'img/admin.svg', '2000-01-01', 'All');
+
+INSERT INTO users (role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game)
+VALUES (1, 'alice@example.com', 'Alice', 'Reyes', 'alicePlays', 'Alice123!', 'img/alice.svg', '1998-03-14', 'Elden Ring');
+
+INSERT INTO users (role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game)
+VALUES (1, 'bob@example.com', 'Bob', 'Nguyen', 'bobgamer', 'Bob123!', 'img/bob.svg', '1995-07-22', 'Hollow Knight');
+
+INSERT INTO users (role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game)
+VALUES (1, 'carol@example.com', 'Carol', 'Smith', 'caroldev', 'Carol123!', 'img/carol.svg', '2001-11-05', 'Stardew Valley');
+
+INSERT INTO users (role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game)
+VALUES (1, 'dave@example.com', 'Dave', 'Lopez', 'davinator', 'Dave123!', 'img/dave.svg', '1993-06-18', 'Dark Souls III');
 
 CREATE TABLE tweets (
   tweet_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,3 +84,51 @@ CREATE TABLE bans (
   FOREIGN KEY (banned_user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (banned_by_admin_id) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- Seed: follows
+-- alice(2) follows bob(3) and carol(4)
+INSERT INTO follows (follower_id, followee_id) VALUES (2, 3);
+INSERT INTO follows (follower_id, followee_id) VALUES (2, 4);
+-- bob(3) follows alice(2)
+INSERT INTO follows (follower_id, followee_id) VALUES (3, 2);
+-- carol(4) follows alice(2) and bob(3)
+INSERT INTO follows (follower_id, followee_id) VALUES (4, 2);
+INSERT INTO follows (follower_id, followee_id) VALUES (4, 3);
+-- dave(5) follows bob(3)
+INSERT INTO follows (follower_id, followee_id) VALUES (5, 3);
+
+-- Seed: tweets (user ids: admin=1, alice=2, bob=3, carol=4, dave=5)
+INSERT INTO tweets (user_id, content) VALUES (2, 'Just joined Chirp! This dark mode UI is everything 😍 already feeling at home here.');
+INSERT INTO tweets (user_id, content) VALUES (3, 'Anyone else been playing Elden Ring non-stop? The DLC is absolutely brutal — in the best way.');
+INSERT INTO tweets (user_id, content) VALUES (4, 'Hot take: Stardew Valley is more relaxing than any meditation app. Change my mind.');
+INSERT INTO tweets (user_id, content) VALUES (2, 'The lore in Hollow Knight is so deep it broke my brain. Still thinking about it weeks later.');
+INSERT INTO tweets (user_id, content) VALUES (5, 'Dark Souls III pvp is still alive and thriving. Invasions at Pontiff never get old.');
+INSERT INTO tweets (user_id, content) VALUES (3, 'Unpopular opinion: the first Hollow Knight boss that actually killed me was Crystal Guardian. Twice.');
+INSERT INTO tweets (user_id, content) VALUES (4, 'Just finished my 200-hour Stardew farm. Starting over with a different layout. This is fine.');
+INSERT INTO tweets (user_id, content) VALUES (1, 'Welcome everyone to Chirp! Keep it friendly and have fun 🎮');
+-- replies: tweet_id will be 1-8 in insertion order
+INSERT INTO tweets (user_id, parent_id, content) VALUES (3, 1, 'Welcome!! Same, loving it here already 🙌');
+INSERT INTO tweets (user_id, parent_id, content) VALUES (4, 1, 'Yesss the vibe is immaculate 💜');
+INSERT INTO tweets (user_id, parent_id, content) VALUES (2, 2, 'The DLC nearly made me rage quit but I kept going. Mesmer is insane.');
+INSERT INTO tweets (user_id, parent_id, content) VALUES (5, 2, 'Elden Ring is life. Fromsoft never misses.');
+INSERT INTO tweets (user_id, parent_id, content) VALUES (3, 3, 'Stardew is literally therapy. Cannot argue with this.');
+INSERT INTO tweets (user_id, parent_id, content) VALUES (2, 6, 'Crystal Guardian got me so many times I lost count 😭');
+
+-- Seed: likes
+INSERT INTO likes (user_id, tweet_id, type) VALUES (3, 1, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (4, 1, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (5, 1, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (2, 2, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (4, 2, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (5, 2, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (2, 3, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (3, 3, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (2, 8, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (3, 8, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (4, 8, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (2, 7, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (3, 4, 'like');
+INSERT INTO likes (user_id, tweet_id, type) VALUES (4, 5, 'like');
+
+-- Seed: ban dave(5) so admin panel shows a banned user
+INSERT INTO bans (banned_user_id, banned_by_admin_id, reason) VALUES (5, 1, 'Toxic behavior in comments');

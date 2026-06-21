@@ -3,11 +3,13 @@ package epaw.lab4.repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import epaw.lab4.model.Tweet;
+import epaw.lab4.util.DBLogger;
 
 public class TweetRepository extends BaseRepository {
 
@@ -26,18 +28,31 @@ public class TweetRepository extends BaseRepository {
 
     public void save(Tweet tweet) {
         String query = "INSERT INTO tweets (user_id, content, created_at, parent_id) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement statement = db.prepareStatement(query)) {
+        try (PreparedStatement statement = db.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, tweet.getUid());
             statement.setString(2, tweet.getContent());
             statement.setTimestamp(3, tweet.getPostDateTime());
-            
-            // Permite guardar si es un comentario
-            if (tweet.getParentId() != null && tweet.getParentId() > 0) {
+
+            boolean hasParent = tweet.getParentId() != null && tweet.getParentId() > 0;
+            if (hasParent) {
                 statement.setInt(4, tweet.getParentId());
             } else {
                 statement.setNull(4, java.sql.Types.INTEGER);
             }
             statement.executeUpdate();
+            try (ResultSet keys = statement.getGeneratedKeys()) {
+                if (keys.next()) {
+                    int id = keys.getInt(1);
+                    tweet.setId(id);
+                    String parentSql = hasParent ? String.valueOf(tweet.getParentId()) : "NULL";
+                    String ts = DBLogger.q(tweet.getPostDateTime() != null ? tweet.getPostDateTime().toString() : null);
+                    DBLogger.append(
+                        "INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (" +
+                        id + ", " + tweet.getUid() + ", " + DBLogger.q(tweet.getContent()) +
+                        ", " + ts + ", " + parentSql + ")"
+                    );
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,6 +64,7 @@ public class TweetRepository extends BaseRepository {
             statement.setInt(1, tweetId);
             statement.setInt(2, userId);
             statement.executeUpdate();
+            DBLogger.append("DELETE FROM tweets WHERE tweet_id = " + tweetId + " AND user_id = " + userId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,6 +75,7 @@ public class TweetRepository extends BaseRepository {
         try (PreparedStatement statement = db.prepareStatement(query)) {
             statement.setInt(1, tweetId);
             statement.executeUpdate();
+            DBLogger.append("DELETE FROM tweets WHERE tweet_id = " + tweetId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,6 +87,7 @@ public class TweetRepository extends BaseRepository {
             statement.setString(1, content);
             statement.setInt(2, tweetId);
             statement.executeUpdate();
+            DBLogger.append("UPDATE tweets SET content = " + DBLogger.q(content) + " WHERE tweet_id = " + tweetId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -228,6 +246,7 @@ public class TweetRepository extends BaseRepository {
             statement.setInt(1, userId);
             statement.setInt(2, tweetId);
             statement.executeUpdate();
+            DBLogger.append("INSERT INTO likes (user_id, tweet_id) VALUES (" + userId + ", " + tweetId + ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -239,6 +258,7 @@ public class TweetRepository extends BaseRepository {
             statement.setInt(1, userId);
             statement.setInt(2, tweetId);
             statement.executeUpdate();
+            DBLogger.append("DELETE FROM likes WHERE user_id = " + userId + " AND tweet_id = " + tweetId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
