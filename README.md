@@ -1,33 +1,40 @@
-# 🚀 Lab 4 - EPAW (Exemple de funcionalitats bàsiques)
+# Chirp — EPAW Final Project
 
-Aquesta és la plantilla base per a la Pràctica 4 de l'assignatura d'EPAW. Està configurada perquè puguis veure com programar les funcionalitats bàsiques necessàries per a assolir els objectius de l'assignatura.
+## Requirements
+- Java 21
+- Maven 3.8+
 
----
+## How to run
 
-## 📖 Manual d'Instruccions
-Si ets alumne de l'assignatura, hem preparat una guia detallada que t'explicarà tot el necessari pas a pas:
+1. Clone or unzip the project.
 
-👉 **[LLEGIR LA GUIA DE L'ESTUDIANT](GUIA_ESTUDIANT.md)** 👈
+2. Open a terminal in the project root (where pom.xml lives).
 
----
-
-## 🛠️ Com començar?
-
-1. **Obre el terminal** a la carpeta arrel del projecte.
-2. **Executa el servidor**:
-   ```bash
+3. Start the server:
+   ```
    mvn jetty:run
    ```
-3. **Accedeix a l'aplicació**:
-   Obre el teu navegador a [http://localhost:8080](http://localhost:8080)
 
----
+4. Open your browser at:
+   http://localhost:8080
 
-## ✨ Avantatges d'aquesta Plantilla
-- **Hot-Reload**: Els servlets es recarreguen sols al desar.
-- **SQLite Integrat**: Base de dades a punt sense instal·lacions complexes.
-- **Snippets**: Dreceres a VS Code per a HTML i Servlets.
+The database is created automatically on every startup from DB.txt.
+Any data created at runtime (posts, follows, likes, bans) is appended
+to DB.txt and survives restarts.
 
----
+## Seed accounts
 
-*Creat per al laboratori d'EPAW • Universitat Pompeu Fabra*
+| Role          | Email                    | Password   |
+|---------------|--------------------------|------------|
+| Admin         | admin@xgames.com         | Admin123!  |
+| Regular user  | alice@example.com        | Alice123!  |
+| Regular user  | bob@example.com          | Bob123!    |
+| Banned user   | carol@example.com        | Carol123!  |
+| Regular user  | dave@example.com         | Dave123!   |
+
+## Notes
+- Tweet images must be .jpg or .svg (PNG is rejected).
+- Images are stored in src/main/webapp/img/tweets/ and served as
+  static files — they persist across restarts independently of DB.txt.
+- To fully reset the app, delete lab4.db and clear the runtime-appended
+  lines at the bottom of DB.txt (everything after the seed data block).
