@@ -131,8 +131,15 @@ INSERT INTO likes (user_id, tweet_id, type) VALUES (3, 4, 'like');
 INSERT INTO likes (user_id, tweet_id, type) VALUES (4, 5, 'like');
 
 -- Seed: ban dave(5) so admin panel shows a banned user
-INSERT INTO bans (banned_user_id, banned_by_admin_id, reason) VALUES (5, 1, 'Toxic behavior in comments');INSERT INTO users (id, role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game, created_at, updated_at) VALUES (6, 1, 'melker.sitges@gmail.com', 'Melker', 'Svensson', 'Melle02', 'Melker8539!', 'img/Melker Fredrik Svens.svg', '2002-05-30', 'LOL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO bans (banned_user_id, banned_by_admin_id, reason) VALUES (5, 1, 'Toxic behavior in comments');INSERT INTO users (id, role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game, created_at, updated_at) VALUES (6, 1, 'melker.sitges@gmail.com', 'Melker', 'Svensson', 'Melle02', 'Melker8539!', 'img/melker.svg', '2002-05-30', 'LOL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (15, 6, 'Hi guys, name is Melker and I just joined the comunity. Really excited to get to know you all!', '2026-06-21 14:55:45.702', NULL);
 INSERT INTO follows (follower_id, followee_id) VALUES (6, 2);
 INSERT INTO follows (follower_id, followee_id) VALUES (6, 5);
-INSERT INTO users (id, role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game, created_at, updated_at) VALUES (7, 1, 'Zara@gmail.com', 'Zara ', 'Jensen', 'Zqueen', 'Zara2026!', 'img/Zara .svg', '2002-02-25', 'CS and LOL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO users (id, role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game, created_at, updated_at) VALUES (7, 1, 'Zara@gmail.com', 'Zara', 'Jensen', 'Zqueen', 'Zara2026!', 'img/Zara.svg', '2002-02-25', 'CS and LOL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO users (id, role_id, email, name, surname, nickname, password, picture, birth_date, favorite_game, created_at, updated_at) VALUES (8, 1, 'fabian.sitges@gmail.com', 'Fabian', 'Svensson', 'Fabbe09', 'Fabbe99!', 'img/Fabian.svg', '1999-10-06', 'LOL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO follows (follower_id, followee_id) VALUES (8, 6);
+INSERT INTO follows (follower_id, followee_id) VALUES (8, 5);
+INSERT INTO follows (follower_id, followee_id) VALUES (8, 4);
+INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (16, 8, 'Da fuk r u on about Carol?', '2026-06-21 15:59:02.053', 3);
+INSERT INTO likes (user_id, tweet_id) VALUES (8, 7);

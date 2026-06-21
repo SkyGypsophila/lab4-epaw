@@ -17,7 +17,7 @@ public class DBManager {
 		try {
 			// SQLite connection
 			Class.forName("org.sqlite.JDBC");
-			boolean dbExists = Files.exists(Paths.get(DB_FILE));
+			Files.deleteIfExists(Paths.get(DB_FILE));
 			connection = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
 
 			// Enable foreign keys in SQLite
@@ -25,9 +25,7 @@ public class DBManager {
 				stmt.execute("PRAGMA foreign_keys = ON;");
 			}
 
-			if (!dbExists) {
-				initDatabase();
-			}
+			initDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

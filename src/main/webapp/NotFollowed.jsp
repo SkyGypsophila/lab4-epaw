@@ -5,14 +5,15 @@
 $(document).ready(function(){
 	$(document).off("input", "#searchUsersInput").on("input", "#searchUsersInput", function() {
 		var val = $(this).val().toLowerCase();
-		$(".suggestion-card").each(function() {
-			var name = $(this).attr("data-name").toLowerCase();
-			if (name.indexOf(val) !== -1) {
-				$(this).show();
-			} else {
-				$(this).hide();
-			}
-		});
+		if (val === "") {
+			$(".suggestion-card").each(function(i) {
+				$(this).toggle(i < 5);
+			});
+		} else {
+			$(".suggestion-card").each(function() {
+				$(this).toggle($(this).attr("data-name").toLowerCase().indexOf(val) !== -1);
+			});
+		}
 	});
 });
 </script>
@@ -33,8 +34,8 @@ $(document).ready(function(){
 		<div class="who-row"><span class="muted">No suggestions</span></div>
 	</c:when>
 	<c:otherwise>
-	<c:forEach var="u" items="${users}">
-		<div id="${u.id}" class="suggestion-card who-row" data-name="${u.name}">
+	<c:forEach var="u" items="${users}" varStatus="st">
+		<div id="${u.id}" class="suggestion-card who-row" data-name="${u.name}"<c:if test="${st.index >= 5}"> style="display:none"</c:if>>
 			<img src="${u.picture}" alt="Avatar" class="avatar sm">
 			<div class="meta">
 				<b><a href="UserWall?id=${u.id}" class="menu">${u.name}</a></b>

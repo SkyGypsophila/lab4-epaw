@@ -31,7 +31,7 @@ public class NotFollowed extends HttpServlet {
 			if (user!= null) {
 				try {
 					UserService userService = UserService.getInstance();
-					users = userService.getNotFollowedUsers(user.getId(),0,4);
+					users = userService.getNotFollowedUsers(user.getId(),0,20);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

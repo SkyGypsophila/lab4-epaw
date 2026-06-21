@@ -49,7 +49,8 @@ public class AddTweet extends HttpServlet {
 				
 			}
 		}
-
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.getWriter().write("ok");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

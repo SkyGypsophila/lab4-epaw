@@ -258,7 +258,7 @@ public class UserRepository extends BaseRepository {
 
     // Find users NOT followed by the current user
     public Optional<List<User>> findNotFollowed(Integer id, Integer start, Integer end) {
-        String query = "SELECT id, name, picture FROM users WHERE id NOT IN (SELECT followee_id FROM follows WHERE follower_id = ?) AND id <> ? ORDER BY name LIMIT ?, ?";
+        String query = "SELECT id, name, picture FROM users WHERE id NOT IN (SELECT followee_id FROM follows WHERE follower_id = ?) AND id <> ? AND role_id = 1 ORDER BY name LIMIT ?, ?";
         try (PreparedStatement statement = db.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.setInt(2, id);

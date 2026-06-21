@@ -35,11 +35,25 @@
 
 		};
 
+		App.reloadTweets = function () {
+			if ($("#feedIterator").length) {
+				$("#feedIterator").load("FeedTweets");
+			} else if ($("#iterator").length) {
+				$("#iterator").load("Tweets");
+			} else if ($("#globalFeedIterator").length) {
+				$("#globalFeedIterator").load("GlobalFeedTweets");
+			} else if ($("#userWallIterator").length) {
+				var uid = $("#userWallId").val();
+				if (uid) $("#userWallIterator").load("UserWallTweets?id=" + uid);
+			}
+		};
+
 		App.bindEvents = function () {
 			// Deal with menu clicks
 			$(document).on("click", ".menu", function (event) {
 				event.preventDefault();
 				$('#content').load($(this).attr('href'));
+				$('#rcolumn').load("NotFollowed");
 				App.stack();
 			});
 			// Deal with form submission via AJAX
@@ -61,6 +75,8 @@
 				}).done(function (html) {
 					$('#navigation').load("Menu");
 					$("#content").html(html);
+					$('#lcolumn').load("Profile");
+					$('#rcolumn').load("NotFollowed");
 				});
 			});
 			/* Follow user */
@@ -141,37 +157,22 @@
 				$.post("LikeTweet", {
 					id : tweetDiv.attr("id")
 				}, function() {
-					// Reload the correct tweet list depending on which page we're on
-					if ($("#feedIterator").length) {
-						$("#feedIterator").load("FeedTweets");
-					} else if ($("#iterator").length) {
-						$("#iterator").load("Tweets");
-					} else if ($("#globalFeedIterator").length) {
-						$("#globalFeedIterator").load("GlobalFeedTweets");
-					}
+					App.reloadTweets();
 				});
 				event.preventDefault();
 			});
 			/* Comentar / Responder Tweet (Lógica Añadida) */
 			$(document).on("click", ".commentTweetBtn", function(event) {
 				event.preventDefault();
-				var tweetDiv = $(this).closest(".w3-card"); // Busca el contenedor del tweet
-				var parentId = tweetDiv.attr("id"); // Obtiene el ID del tweet padre
-				var content = tweetDiv.find(".commentText").val(); // Obtiene el texto introducido
-				
+				var tweetDiv = $(this).closest(".w3-card");
+				var parentId = tweetDiv.attr("id");
+				var content = tweetDiv.find(".commentText").val();
 				if (content.trim() !== "") {
 					$.post("AddTweet", {
 						content : content,
 						parentId : parentId
 					}, function() {
-						// Recargamos el iterador de tweets dinámico en el que nos encontremos actualmente
-						if ($("#feedIterator").length) {
-							$("#feedIterator").load("FeedTweets");
-						} else if ($("#iterator").length) {
-							$("#iterator").load("Tweets");
-						} else if ($("#globalFeedIterator").length) {
-							$("#globalFeedIterator").load("GlobalFeedTweets");
-						}
+						App.reloadTweets();
 					});
 				}
 			});
