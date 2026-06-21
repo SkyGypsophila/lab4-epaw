@@ -52,8 +52,11 @@
 			// Deal with menu clicks
 			$(document).on("click", ".menu", function (event) {
 				event.preventDefault();
-				$('#content').load($(this).attr('href'));
-				$('#rcolumn').load("NotFollowed");
+				var href = $(this).attr('href');
+				$('#content').load(href);
+				if (href !== 'Logout') {
+					$('#rcolumn').load("NotFollowed");
+				}
 				App.stack();
 			});
 			// Deal with form submission via AJAX

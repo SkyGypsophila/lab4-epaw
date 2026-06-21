@@ -273,6 +273,7 @@ public class TweetRepository extends BaseRepository {
         tweet.setUname(rs.getString("name"));
         tweet.setLikeCount(rs.getInt("like_count"));
         tweet.setLiked(rs.getInt("liked_by_user") > 0);
+        tweet.setBanned(rs.getInt("is_banned") > 0);
         return tweet;
     }
 }

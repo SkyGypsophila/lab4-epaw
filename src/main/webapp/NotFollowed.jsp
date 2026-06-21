@@ -41,7 +41,9 @@ $(document).ready(function(){
 				<b><a href="UserWall?id=${u.id}" class="menu">${u.name}</a></b>
 				<span>Friend suggestion</span>
 			</div>
-			<button type="button" class="followUser btn sm"><i class="fa-solid fa-user-plus"></i> Follow</button>
+			<c:if test="${sessionScope.user.role != 'ADMINISTRATOR'}">
+				<button type="button" class="followUser btn sm"><i class="fa-solid fa-user-plus"></i> Follow</button>
+			</c:if>
 		</div>
 	</c:forEach>
 	</c:otherwise>

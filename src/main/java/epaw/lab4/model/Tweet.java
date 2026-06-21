@@ -17,8 +17,9 @@ public class Tweet implements java.io.Serializable {
 	private Timestamp postDateTime; 
 	private String content;
 	private int likeCount;
-	private boolean liked; 
-	
+	private boolean liked;
+	private boolean banned;
+
 	// NUEVO: Lista para guardar los comentarios anidados
 	private List<Tweet> comments = new ArrayList<>();
 
@@ -54,6 +55,15 @@ public class Tweet implements java.io.Serializable {
 
 	public boolean isLiked() { return liked; }
 	public void setLiked(boolean liked) { this.liked = liked; }
+
+	public boolean isBanned() { return banned; }
+	public void setBanned(boolean banned) { this.banned = banned; }
+
+	public String getFormattedTime() {
+		if (postDateTime == null) return "";
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd MMM yyyy, HH:mm");
+		return sdf.format(postDateTime);
+	}
 
 	// NUEVO: Getters y Setters de los comentarios
 	public List<Tweet> getComments() { return comments; }
