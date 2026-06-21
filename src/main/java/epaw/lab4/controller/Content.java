@@ -22,7 +22,7 @@ public class Content extends HttpServlet {
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession(false);
-		String view = "Login";
+		String view = "GlobalFeed";
 
 		if (session != null && session.getAttribute("user") != null) {
 			User user = (User) session.getAttribute("user");
