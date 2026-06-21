@@ -112,8 +112,8 @@ public class UserService {
     }
 
     // Get unfollowed users
-    public List<User> getNotFollowedUsers(Integer id, Integer start, Integer end) {
-        Optional<List<User>> users = userRepository.findNotFollowed(id, start, end);
+    public List<User> getNotFollowedUsers(Integer id, Integer start, Integer end, boolean includeAll) {
+        Optional<List<User>> users = userRepository.findNotFollowed(id, start, end, includeAll);
         if (users.isPresent())
             return users.get();
         return null;

@@ -154,3 +154,6 @@ DELETE FROM tweets WHERE tweet_id = 15;
 DELETE FROM bans WHERE banned_user_id = 5;
 INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (17, 8, 'Melker is not good at LOL, so hence forward I shall not play with him anymore. Sage ## ', '2026-06-21 16:33:45.096', NULL);
 UPDATE users SET name = 'Fabian', nickname = 'Fabbe09', email = 'fabian.sitges@gmail.com', favorite_game = 'LOL', updated_at = CURRENT_TIMESTAMP WHERE id = 8;
+DELETE FROM tweets WHERE tweet_id = 12;
+INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (18, 8, 'Hi', '2026-06-21 17:07:28.403', NULL);
+INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (19, 6, 'Cool', '2026-06-21 17:10:51', NULL);

@@ -27,7 +27,6 @@
     </div>
 
     <button type="button" id="editProfileBtn" class="btn full" style="margin-top:16px;"><i class="fa-solid fa-pen-to-square"></i> &nbsp;Edit profile</button>
-    <a href="Followed" class="menu btn ghost full" style="margin-top:8px;"><i class="fa-solid fa-user-group"></i> &nbsp;Following / Buddies</a>
   </div>
 
   <div id="profileEditDiv" style="display:none;">

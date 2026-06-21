@@ -3,10 +3,15 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	<c:if test="${not empty sessionScope.user}">
+	<c:choose>
+	<c:when test="${not empty sessionScope.user}">
 	$('#rcolumn').load('NotFollowed');
 	$('#lcolumn').load('Profile');
-	</c:if>
+	</c:when>
+	<c:otherwise>
+	$('#lcolumn').load('Login');
+	</c:otherwise>
+	</c:choose>
 	$('#globalFeedIterator').load('GlobalFeedTweets');
 
 	$(document).off("click", "#showFriendFeedGlobal").on("click", "#showFriendFeedGlobal", function(){

@@ -2,14 +2,16 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <script type="text/javascript">
-$(document).ready(function(){
-  $(document).off("input", "#searchAdminInput").on("input", "#searchAdminInput", function() {
-    var val = $(this).val().toLowerCase();
-    $(".user-row").each(function() {
-      var name = $(this).attr("data-name").toLowerCase();
-      var email = $(this).attr("data-email").toLowerCase();
-      $(this).toggle(val === "" || name.indexOf(val) !== -1 || email.indexOf(val) !== -1);
-    });
+$(document).off("input", "#searchAdminInput").on("input", "#searchAdminInput", function() {
+  var val = $(this).val().toLowerCase().trim();
+  $("#content .user-row").each(function() {
+    var name = ($(this).attr("data-name") || "").toLowerCase();
+    var email = ($(this).attr("data-email") || "").toLowerCase();
+    if (val === "" || name.indexOf(val) !== -1 || email.indexOf(val) !== -1) {
+      $(this).show();
+    } else {
+      $(this).hide();
+    }
   });
 });
 </script>

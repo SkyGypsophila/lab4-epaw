@@ -26,12 +26,17 @@ public class TweetRepository extends BaseRepository {
         return instance;
     }
 
+    private static final java.text.SimpleDateFormat TS_FMT =
+        new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     public void save(Tweet tweet) {
         String query = "INSERT INTO tweets (user_id, content, created_at, parent_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = db.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, tweet.getUid());
             statement.setString(2, tweet.getContent());
-            statement.setTimestamp(3, tweet.getPostDateTime());
+            String tsStr = tweet.getPostDateTime() != null
+                ? TS_FMT.format(tweet.getPostDateTime()) : null;
+            statement.setString(3, tsStr);
 
             boolean hasParent = tweet.getParentId() != null && tweet.getParentId() > 0;
             if (hasParent) {
@@ -45,11 +50,10 @@ public class TweetRepository extends BaseRepository {
                     int id = keys.getInt(1);
                     tweet.setId(id);
                     String parentSql = hasParent ? String.valueOf(tweet.getParentId()) : "NULL";
-                    String ts = DBLogger.q(tweet.getPostDateTime() != null ? tweet.getPostDateTime().toString() : null);
                     DBLogger.append(
                         "INSERT INTO tweets (tweet_id, user_id, content, created_at, parent_id) VALUES (" +
                         id + ", " + tweet.getUid() + ", " + DBLogger.q(tweet.getContent()) +
-                        ", " + ts + ", " + parentSql + ")"
+                        ", " + DBLogger.q(tsStr) + ", " + parentSql + ")"
                     );
                 }
             }

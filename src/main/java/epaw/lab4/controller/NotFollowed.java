@@ -31,7 +31,8 @@ public class NotFollowed extends HttpServlet {
 			if (user!= null) {
 				try {
 					UserService userService = UserService.getInstance();
-					users = userService.getNotFollowedUsers(user.getId(),0,20);
+					boolean isAdmin = "ADMINISTRATOR".equalsIgnoreCase(user.getRole());
+					users = userService.getNotFollowedUsers(user.getId(), 0, 20, isAdmin);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

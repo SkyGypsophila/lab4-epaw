@@ -41,7 +41,7 @@ $(document).ready(function(){
 				<b><a href="UserWall?id=${u.id}" class="menu">${u.name}</a></b>
 				<span>Friend suggestion</span>
 			</div>
-			<c:if test="${sessionScope.user.role != 'ADMINISTRATOR'}">
+			<c:if test="${sessionScope.user.role != 'ADMINISTRATOR' && !sessionScope.user.banned}">
 				<button type="button" class="followUser btn sm"><i class="fa-solid fa-user-plus"></i> Follow</button>
 			</c:if>
 		</div>
